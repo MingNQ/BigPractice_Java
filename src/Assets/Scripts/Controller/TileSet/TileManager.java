@@ -96,8 +96,8 @@ public class TileManager {
         }
 
         // Draw something else
-        g2.drawImage(tile[6].getImage(), -12, 0, gp.tileSize * 3, gp.tileSize * 3, null);
-        g2.drawImage(tile[5].getImage(), -24, -48, gp.tileSize * 3, gp.tileSize * 3, null);
+//        g2.drawImage(tile[6].getImage(), -12, 0, gp.tileSize * 3, gp.tileSize * 3, null);
+//        g2.drawImage(tile[5].getImage(), -24, -48, gp.tileSize * 3, gp.tileSize * 3, null);
     }
 
     /* MAP

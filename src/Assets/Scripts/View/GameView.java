@@ -1,22 +1,25 @@
 package View;
 
-import Controller.Event.CollisionManager;
+import Controller.AssetsSetup;
+import Controller.Character.EntityController;
 import Controller.Event.KeyHandler;
 import Controller.Character.PlayerController;
 import Controller.Item.ItemController;
-import Controller.Item.ItemFlashController;
-import Controller.Item.ItemGhostController;
 import Controller.Monster.MonsterController;
+import Controller.Monster.MonsterPool;
+import Controller.Monster.ProjectileController;
 import Controller.TileSet.TileManager;
-import Model.Entity;
+import Model.Fireball;
+import Model.Projectile;
 import Model.Tile;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameView extends JPanel implements Runnable {
     // CONSTANT var
@@ -36,13 +39,15 @@ public class GameView extends JPanel implements Runnable {
     private final int FPS = 60;
 
     // Instantiate
-    private TileManager tileM = new TileManager(this);
-    private KeyHandler keyH = new KeyHandler();
-    private Thread gameThread;
+    public TileManager tileM = new TileManager(this);
+    public KeyHandler keyH = new KeyHandler();
+    public Thread gameThread;
 //    private CollisionManager collisionManager = new CollisionManager(this);
-    private PlayerController playerController = new PlayerController(this, keyH);
-    private ItemController itemController = new ItemController(this);
-    private MonsterController monsterController = new MonsterController(this);
+
+    public PlayerController playerController = new PlayerController(this, keyH);
+    public ItemController itemController = new ItemController(this);
+    public ArrayList<MonsterController> monsterList = new ArrayList<>();
+    public MonsterPool monsterPool = new MonsterPool(this);
 
     public GameView() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Set size for screen
@@ -58,38 +63,6 @@ public class GameView extends JPanel implements Runnable {
         gameThread.start();
     }
 
-//      "SLEEP" method
-//    @Override
-//    public void run() { // CREATE game LOOP
-//
-//        // DRAW per 0.01667s
-//        double drawInterval = ONE_BILL / FPS;
-//        double nextDrawTime = System.nanoTime() + drawInterval;
-//
-//        while(gameThread != null) {
-//            // 1. UPDATE: update information
-//            update(); // Call update method
-//
-//            // 2. DRAW: draw the screen with the updated information
-//            repaint(); // Call paintComponent method
-//
-//            // Calculate remaining time to next frame and make THREAD sleep
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime /= 1000000; // Convert to milliseconds
-//
-//                if (remainingTime < 0)
-//                    remainingTime = 0;
-//
-//                Thread.sleep((long) remainingTime);
-//
-//                nextDrawTime += drawInterval;
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
 //    "DELTA" method
     @Override
     public void run() {
@@ -99,6 +72,8 @@ public class GameView extends JPanel implements Runnable {
         long currentTime;
         long timer = 0;
         int drawCount = 0;
+
+        setUpGame();
 
         while(gameThread != null) {
             currentTime = System.nanoTime();
@@ -127,11 +102,38 @@ public class GameView extends JPanel implements Runnable {
         }
     }
 
+    // Set up default entity
+    public void setUpGame() {
+        for (int i = 0; i < 5; i++) {
+            monsterList.add(monsterPool.getMonster());
+        }
+    }
+
     // Update is called 60 per frame
     public void update() {
         playerController.update(); // Update player
-        monsterController.update();
+        // Update monster
+        if (monsterList.isEmpty()) {
+            for (int i = 0; i < 5; i++) {
+                monsterList.add(monsterPool.getMonster());
+            }
+        }
 
+        for(int i = 0; i < monsterList.size(); i++) {
+            MonsterController mons = monsterList.get(i);
+            mons.update();
+            if (!mons.ms.alive)
+                mons.setDefaultValue();
+        }
+
+//        for (int i = 0; i < monsterList.size(); i++) {
+//            MonsterController mons = monsterList.get(i);
+//            if (!mons.ms.alive) {
+//                mons.setDefaultValue();
+//                monsterPool.returnMonster(mons);
+//                monsterList.remove(mons);
+//            }
+//        }
     }
 
     // Draw component
@@ -143,7 +145,23 @@ public class GameView extends JPanel implements Runnable {
         tileM.draw(g2); // Draw tile set background
         playerController.draw(g2); // Draw player
         itemController.draw(g2);// Draw item
-        monsterController.draw(g2);
+
+        // Draw monster
+        for(int i = 0; i < monsterList.size(); i++) {
+            MonsterController mons = monsterList.get(i);
+            mons.draw(g2);
+            if (!mons.ms.alive)
+                mons.setDefaultValue();
+        }
+
+//        for (int i = 0; i < monsterList.size(); i++) {
+//            MonsterController mons = monsterList.get(i);
+//            if (!mons.ms.alive) {
+//                mons.setDefaultValue();
+//                monsterPool.returnMonster(mons);
+//                monsterList.remove(mons);
+//            }
+//        }
 
         g2.dispose(); // Release system resource that is using
     }

@@ -5,7 +5,7 @@ import Model.Item;
 import View.GameView;
 
 public class CollisionManager {
-    private GameView gp;
+    GameView gp;
 
     public CollisionManager(GameView gp) {
         this.gp = gp;

@@ -3,78 +3,41 @@ package Controller.Character;
 import Controller.Event.KeyHandler;
 import Controller.Item.ItemFlashController;
 import Controller.Item.ItemGhostController;
+import Model.Player;
 import View.GameView;
 import javax.imageio.ImageIO;
-import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class PlayerController extends EntityController {
+public class PlayerController {
+    public Player player;
     GameView gp;
     KeyHandler keyH;
     // Item
-    private boolean isUsed;
-    ItemFlashController flash = new ItemFlashController(this);
-    ItemGhostController ghost = new ItemGhostController(this);
+    public boolean isUsed;
+    public ItemFlashController flash = new ItemFlashController(this);
+    public ItemGhostController ghost = new ItemGhostController(this);
 
     public PlayerController(GameView gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
-
-        getEntity().setSolidArea(new Rectangle(8, 16, (int)(gp.tileSize/(1.5)), (int)(gp.tileSize/(1.5))));
+        this.player = new Player();
+        this.player.getPlayerImage("Character_01");
+        // getEntity().setSolidArea(new Rectangle(8, 16, (int)(gp.tileSize/(1.5)), (int)(gp.tileSize/(1.5))));
 
         this.setDefaultValues();
-        this.getPlayerImage("Character_01");
-    }
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public void setUsed(boolean used) {
-        isUsed = used;
     }
 
     // Default value
     public void setDefaultValues() {
-        getEntity().setPosX(100);
-        getEntity().setPosY(100);
-        getEntity().setSpeed(6);
-        setDirection("down");
+        player.posX = gp.screenWidth/2;
+        player.posY = gp.screenHeight/2;
+        player.speed = 5;
+        player.direction = "down";
         isUsed = false;
-    }
-
-    // Upload image
-    public void getPlayerImage(String character) {
-        try {
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_2.png"));
-            down3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_3.png"));
-            down4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_4.png"));
-
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_2.png"));
-            left3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_3.png"));
-            left4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_4.png"));
-
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_2.png"));
-            right3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_3.png"));
-            right4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_4.png"));
-
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_2.png"));
-            up3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_3.png"));
-            up4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_4.png"));
-
-            shadow = ImageIO.read(getClass().getResourceAsStream("/Characters/Shadow_player.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        player.isCollision = false;
     }
 
     // Update is called 60 per frame
@@ -86,32 +49,32 @@ public class PlayerController extends EntityController {
             // Movement
             if (keyH.upPressed) {
                 if (keyH.leftPressed) {
-                    setDirection("left");
-                    moveUpLeft();
+                    player.direction = "left";
+                    player.moveUpLeft();
                 } else if (keyH.rightPressed) {
-                    setDirection("right");
-                    moveUpRight();
+                    player.direction = "right";
+                    player.moveUpRight();
                 } else {
-                    setDirection("up");
-                    moveUp();
+                    player.direction = "up";
+                    player.moveUp();
                 }
             } else if (keyH.downPressed) {
                 if (keyH.leftPressed) {
-                    setDirection("left");
-                    moveDownLeft();
+                    player.direction = "left";
+                    player.moveDownLeft();
                 } else if (keyH.rightPressed) {
-                    setDirection("right");
-                    moveDownRight();
+                    player.direction = "right";
+                    player.moveDownRight();
                 } else {
-                    setDirection("down");
-                    moveDown();
+                    player.direction = "down";
+                    player.moveDown();
                 }
             } else if (keyH.leftPressed) {
-                setDirection("left");
-                moveLeft();
+                player.direction = "left";
+                player.moveLeft();
             } else if (keyH.rightPressed) {
-                setDirection("right");
-                moveRight();
+                player.direction = "right";
+                player.moveRight();
             }
 
             // Collision
@@ -138,23 +101,31 @@ public class PlayerController extends EntityController {
             */
 
             // Animations
-            setAnimations();
+            player.setAnimations();
         }
     }
 
     // Render image on game view
     public void draw(Graphics2D g2) {
         // Handle direction property
-        BufferedImage image = drawAnimation();
+        BufferedImage image = player.drawAnimation();
+
+        System.out.println("Player: " + player.direction + player.posX + player.posY);
+
+        double tmpPosX = player.posX + 8;
+        double tmpPosY = player.posY + 28;
+        double shadowScaleX = gp.tileSize / player.shadow.getWidth();
+        double shadowScaleY = gp.tileSize / player.shadow.getHeight();
+        double playerScaleX = (double)gp.tileSize / image.getWidth();
+        double playerScaleY = (double)gp.tileSize / image.getHeight();
 
         // Draw player's image
-        int shadowTile = (int) (gp.tileSize / 1.5);
-        AffineTransform at = AffineTransform.getTranslateInstance(getEntity().getPosX() + 8, getEntity().getPosY() + 28);
-        at.scale(gp.tileSize/shadow.getWidth(), gp.tileSize/shadow.getHeight());
-        g2.drawImage(shadow, at, null);
+        AffineTransform at = AffineTransform.getTranslateInstance(tmpPosX, tmpPosY);
+        at.scale(shadowScaleX, shadowScaleY);
+        g2.drawImage(player.shadow, at, null);
 
-        at = AffineTransform.getTranslateInstance(getEntity().getPosX(), getEntity().getPosY());
-        at.scale((double)gp.tileSize / image.getWidth() , (double)gp.tileSize / image.getHeight());
+        at = AffineTransform.getTranslateInstance(player.posX, player.posY);
+        at.scale(playerScaleX, playerScaleY);
         g2.drawImage(image, at, null);
     }
 
@@ -164,18 +135,18 @@ public class PlayerController extends EntityController {
         // Use first item
         if (keyH.fistSkillPressed && flash.isAvailable()) {
             flash.use();
-            if (getDirection() == "up") {
-                getEntity().setPosX(getEntity().getPosX());
-                getEntity().setPosY(getEntity().getPosY() - gp.tileSize);
-            } else if (getDirection() == "down") {
-                getEntity().setPosX(getEntity().getPosX());
-                getEntity().setPosY(getEntity().getPosY() + gp.tileSize);
-            } else if (getDirection() == "left") {
-                getEntity().setPosX(getEntity().getPosX() - gp.tileSize);
-                getEntity().setPosY(getEntity().getPosY());
-            } else if (getDirection() == "right") {
-                getEntity().setPosX(getEntity().getPosX() + gp.tileSize);
-                getEntity().setPosY(getEntity().getPosY());
+            if (player.direction == "up") {
+                player.posX = player.posX;
+                player.posY = player.posY - gp.tileSize;
+            } else if (player.direction == "down") {
+                player.posX = player.posX;
+                player.posY = player.posY + gp.tileSize;
+            } else if (player.direction == "left") {
+                player.posX = player.posX - gp.tileSize;
+                player.posY = player.posY;;
+            } else if (player.direction == "right") {
+                player.posX = player.posX + gp.tileSize;
+                player.posY = player.posY;
             }
             System.out.println("Player use Flash!");
         }
@@ -183,8 +154,9 @@ public class PlayerController extends EntityController {
         if (keyH.secondSkillPressed && ghost.isAvailable()) {
             double buff = 1.2;
             ghost.use();
-            getEntity().setSpeed(getEntity().getSpeed() * 1.2);
-            System.out.println("Player use Ghost! Speed is " + getEntity().getSpeed());
+            player.speed = player.speed * 1.2;
+//            getEntity().setSpeed(getEntity().getSpeed() * 1.2);
+            System.out.println("Player use Ghost! Speed is " + player.speed);
         }
     }
 
@@ -193,9 +165,10 @@ public class PlayerController extends EntityController {
         flash.countDown();
         ghost.countDown();
         if (ghost.getGhostTimeUseCurr() <= 0 && !ghost.isTimeOut()) {
-            getEntity().setSpeed(getEntity().getSpeed() / 1.2);
+            player.speed = player.speed / 1.2;
+//            getEntity().setSpeed(getEntity().getSpeed() / 1.2);
             ghost.setTimeOut(true);
-            System.out.println("Timeout Ghost! Speed is " + getEntity().getSpeed());
+            System.out.println("Timeout Ghost! Speed is " + player.speed);
         }
     }
 }
