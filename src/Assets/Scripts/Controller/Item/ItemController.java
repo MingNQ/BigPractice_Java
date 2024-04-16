@@ -11,7 +11,6 @@ public class ItemController {
     private Item item;
 
     GameView gp;
-
     public ItemController(GameView gp) {
         this.gp = gp;
         item = new Item();

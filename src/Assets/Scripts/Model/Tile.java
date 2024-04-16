@@ -3,8 +3,8 @@ package Model;
 import java.awt.image.BufferedImage;
 
 public class Tile {
-    private BufferedImage image;
-    private boolean isCollision = false;
+    public BufferedImage image;
+    public boolean isCollision = false;
 
     public Tile() {
     }

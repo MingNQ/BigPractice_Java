@@ -61,7 +61,7 @@ public class ItemGhostController {
 
     // When player use setup time and start countdown
     public void use() {
-        if (isAvailable() && player.isUsed()) {
+        if (isAvailable() && player.isUsed) {
             ghostCoolDownCurr = ghostCoolDown;
             ghostTimeUseCurr = ghostTimeUse;
         }
