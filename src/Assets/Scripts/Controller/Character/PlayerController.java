@@ -3,11 +3,13 @@ package Controller.Character;
 import Controller.Event.KeyHandler;
 import Controller.Item.ItemFlashController;
 import Controller.Item.ItemGhostController;
+import Model.Entity;
 import Model.Player;
 import View.GameView;
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -25,8 +27,6 @@ public class PlayerController {
         this.keyH = keyH;
         this.player = new Player();
         this.player.getPlayerImage("Character_01");
-        // getEntity().setSolidArea(new Rectangle(8, 16, (int)(gp.tileSize/(1.5)), (int)(gp.tileSize/(1.5))));
-
         this.setDefaultValues();
     }
 
@@ -36,8 +36,12 @@ public class PlayerController {
         player.posY = gp.screenHeight/2;
         player.speed = 5;
         player.direction = "down";
+        player.alive = true;
         isUsed = false;
-        player.isCollision = false;
+
+        double playerRecPosX = player.posX + 12;
+        double playerRecPosY = player.posY + 20;
+        player.hitbox = new Rectangle2D.Double(playerRecPosX, playerRecPosY, player.recW - 8, player.recH - 8);
     }
 
     // Update is called 60 per frame
@@ -77,29 +81,6 @@ public class PlayerController {
                 player.moveRight();
             }
 
-            // Collision
-            /*
-            getEntity().setCollisionOn(false);
-            gp.checkTile(this.getEntity());
-
-            if (getEntity().isCollisionOn() == false) {
-                switch (getEntity().getDirection()) {
-                    case "up":
-                        moveUp();
-                        break;
-                    case "down":
-                        moveDown();
-                        break;
-                    case "left":
-                        moveLeft();
-                        break;
-                    case "right":
-                        moveRight();
-                        break;
-                }
-            }
-            */
-
             // Animations
             player.setAnimations();
         }
@@ -109,8 +90,6 @@ public class PlayerController {
     public void draw(Graphics2D g2) {
         // Handle direction property
         BufferedImage image = player.drawAnimation();
-
-        System.out.println("Player: " + player.direction + player.posX + player.posY);
 
         double tmpPosX = player.posX + 8;
         double tmpPosY = player.posY + 28;
@@ -127,6 +106,9 @@ public class PlayerController {
         at = AffineTransform.getTranslateInstance(player.posX, player.posY);
         at.scale(playerScaleX, playerScaleY);
         g2.drawImage(image, at, null);
+
+        g2.setColor(Color.red);
+        g2.drawRect((int)player.hitbox.x, (int)player.hitbox.y, (int)player.hitbox.width, (int)player.hitbox.height);
     }
 
     // Player use item
@@ -155,7 +137,6 @@ public class PlayerController {
             double buff = 1.2;
             ghost.use();
             player.speed = player.speed * 1.2;
-//            getEntity().setSpeed(getEntity().getSpeed() * 1.2);
             System.out.println("Player use Ghost! Speed is " + player.speed);
         }
     }
@@ -166,9 +147,9 @@ public class PlayerController {
         ghost.countDown();
         if (ghost.getGhostTimeUseCurr() <= 0 && !ghost.isTimeOut()) {
             player.speed = player.speed / 1.2;
-//            getEntity().setSpeed(getEntity().getSpeed() / 1.2);
             ghost.setTimeOut(true);
             System.out.println("Timeout Ghost! Speed is " + player.speed);
         }
     }
+
 }

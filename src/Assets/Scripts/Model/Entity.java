@@ -1,10 +1,13 @@
 package Model;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Entity {
     public static double SQRT2 = Math.sqrt(2);
+    public int recW = 30;
+    public int recH = 30;
 
     // Position and movement
     public double posX, posY;
@@ -13,7 +16,6 @@ public class Entity {
     public boolean alive;
     public int maxLife;
     public int life;
-    public int damage;
 
     // Render image
     public BufferedImage up1   , up2   , up3   , up4;
@@ -27,8 +29,7 @@ public class Entity {
     public int spriteCount = 0;
 
     // Collision
-    public Rectangle solidArea;
-    public boolean isCollision = false;
+    public Rectangle2D.Double hitbox = new Rectangle2D.Double(posX, posY, recW, recH);
 
     public Entity() {
     }
@@ -100,38 +101,50 @@ public class Entity {
 
     public void moveUp() {
         posY = posY - speed;
+        hitbox.y -= speed;
     }
 
     public void moveDown() {
         posY = posY + speed;
+        hitbox.y += speed;
     }
 
     public void moveLeft() {
         posX = posX - speed;
+        hitbox.x -= speed;
     }
 
     public void moveRight() {
         posX = posX + speed;
+        hitbox.x += speed;
     }
 
 
     public void moveUpLeft() {
         posY -= speed/SQRT2;
+        hitbox.y -= speed/SQRT2;
         posX -= speed/SQRT2;
+        hitbox.x -= speed/SQRT2;
     }
 
     public void moveUpRight() {
         posY -= speed/SQRT2;
+        hitbox.y -= speed/SQRT2;
         posX += speed/SQRT2;
+        hitbox.x += speed/SQRT2;
     }
 
     public void moveDownLeft() {
         posY += speed/SQRT2;
+        hitbox.y += speed/SQRT2;
         posX -= speed/SQRT2;
+        hitbox.x -= speed/SQRT2;
     }
 
     public void moveDownRight() {
         posY += speed/SQRT2;
+        hitbox.y += speed/SQRT2;
         posX += speed/SQRT2;
+        hitbox.x += speed/SQRT2;
     }
 }

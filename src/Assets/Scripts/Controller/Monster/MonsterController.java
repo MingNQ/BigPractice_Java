@@ -1,11 +1,13 @@
 package Controller.Monster;
 
-import Model.Fireball;
 import Model.Monster;
 import Model.Projectile;
 import View.GameView;
+
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -20,7 +22,6 @@ public class MonsterController {
     public MonsterController(GameView gp) {
         this.gp = gp;
         this.ms = new Monster();
-        this.projectile = new Fireball();
         ms.targetPosX = gp.screenWidth/2;
         ms.targetPosY = gp.screenHeight/2;
         setDefaultValue();
@@ -33,7 +34,12 @@ public class MonsterController {
         ms.startPosX = ms.posX;
         ms.startPosY = ms.posY;
         ms.alive = true;
-        ms.isCollision = false;
+
+        double monRecPosX = ms.posX + 12;
+        double monRecPosY = ms.posY + 16;
+        double monRecW = ms.recW - 8;
+        double monRecH = ms.recH - 8;
+        ms.hitbox = new Rectangle2D.Double(monRecPosX, monRecPosY, monRecW, monRecH);
     }
 
     // Random spawn monster
@@ -93,6 +99,9 @@ public class MonsterController {
             at = AffineTransform.getTranslateInstance(ms.posX, ms.posY);
             at.scale(monsterScaleX , monsterScaleY);
             g2.drawImage(image, at, null);
+
+            g2.setColor(Color.pink);
+            g2.drawRect((int)ms.hitbox.x,(int) ms.hitbox.y, (int)ms.hitbox.width,(int)ms.hitbox.height);
         }
     }
 
