@@ -1,7 +1,6 @@
 package View;
 
-import Controller.AssetsSetup;
-import Controller.Character.EntityController;
+import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
 import Controller.Character.PlayerController;
 import Controller.Item.ItemController;
@@ -9,9 +8,6 @@ import Controller.Monster.MonsterController;
 import Controller.Monster.MonsterPool;
 import Controller.Monster.ProjectileController;
 import Controller.TileSet.TileManager;
-import Model.Fireball;
-import Model.Projectile;
-import Model.Tile;
 
 import javax.swing.*;
 import java.awt.Dimension;
@@ -19,7 +15,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameView extends JPanel implements Runnable {
     // CONSTANT var
@@ -35,17 +30,16 @@ public class GameView extends JPanel implements Runnable {
     public final int screenWidth = maxScreenCol * tileSize; // WIDTH of screen = 48 * 16 = 768px
     public final int screenHeight = maxScreenRow * tileSize; // HEIGHT of screen = 48 * 12 = 576px
 
-    // FPS of game
-    private final int FPS = 60;
-
     // Instantiate
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler();
     public Thread gameThread;
-//    private CollisionManager collisionManager = new CollisionManager(this);
 
+//    public AssetsSetup asset = new AssetsSetup(this);
+    public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
     public ItemController itemController = new ItemController(this);
+    public ProjectileController projectileController = new ProjectileController(this);
     public ArrayList<MonsterController> monsterList = new ArrayList<>();
     public MonsterPool monsterPool = new MonsterPool(this);
 
@@ -66,7 +60,9 @@ public class GameView extends JPanel implements Runnable {
 //    "DELTA" method
     @Override
     public void run() {
-        double drawInterval = ONE_BILL / FPS;
+        // FPS of game
+        int FPS = 60;
+        double drawInterval = (double) ONE_BILL / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -112,6 +108,13 @@ public class GameView extends JPanel implements Runnable {
     // Update is called 60 per frame
     public void update() {
         playerController.update(); // Update player
+
+        projectileController.update(); // Update projectile
+
+        // Check if collide
+        if (collisionManager.checkCollide(playerController.player, projectileController.projectile))
+            System.exit(1);
+
         // Update monster
         if (monsterList.isEmpty()) {
             for (int i = 0; i < 5; i++) {
@@ -119,21 +122,15 @@ public class GameView extends JPanel implements Runnable {
             }
         }
 
-        for(int i = 0; i < monsterList.size(); i++) {
-            MonsterController mons = monsterList.get(i);
+        for (MonsterController mons : monsterList) {
             mons.update();
-            if (!mons.ms.alive)
+            if (collisionManager.checkCollide(playerController.player, mons.ms)) {
+                System.exit(1);
+            }
+            if (!mons.ms.alive) {
                 mons.setDefaultValue();
+            }
         }
-
-//        for (int i = 0; i < monsterList.size(); i++) {
-//            MonsterController mons = monsterList.get(i);
-//            if (!mons.ms.alive) {
-//                mons.setDefaultValue();
-//                monsterPool.returnMonster(mons);
-//                monsterList.remove(mons);
-//            }
-//        }
     }
 
     // Draw component
@@ -145,36 +142,16 @@ public class GameView extends JPanel implements Runnable {
         tileM.draw(g2); // Draw tile set background
         playerController.draw(g2); // Draw player
         itemController.draw(g2);// Draw item
+        projectileController.draw(g2); // Draw projectile
 
         // Draw monster
-        for(int i = 0; i < monsterList.size(); i++) {
-            MonsterController mons = monsterList.get(i);
+        for (MonsterController mons : monsterList) {
             mons.draw(g2);
-            if (!mons.ms.alive)
+            if (!mons.ms.alive) {
                 mons.setDefaultValue();
+            }
         }
 
-//        for (int i = 0; i < monsterList.size(); i++) {
-//            MonsterController mons = monsterList.get(i);
-//            if (!mons.ms.alive) {
-//                mons.setDefaultValue();
-//                monsterPool.returnMonster(mons);
-//                monsterList.remove(mons);
-//            }
-//        }
-
         g2.dispose(); // Release system resource that is using
-    }
-
-//    public void checkTile(Entity entity) {
-//        collisionManager.checkTile(entity);
-//    }
-
-    public int getMapTileNum(int col, int row) {
-        return tileM.layerMapTileFirst[col][row];
-    }
-
-    public Tile getTile(int i) {
-        return tileM.tile[i];
     }
 }
