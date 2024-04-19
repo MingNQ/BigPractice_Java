@@ -1,6 +1,9 @@
 package Model;
 
+import Controller.UtilityTool;
+
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Projectile extends Entity {
@@ -9,30 +12,37 @@ public class Projectile extends Entity {
     }
 
     public void getImage(int num) {
+        up1 = setUp(num);
+        up2 = setUp(num);
+        up3 = setUp(num);
+        up4 = setUp(num);
+
+        down1 = setUp(num);
+        down2 = setUp(num);
+        down3 = setUp(num);
+        down4 = setUp(num);
+
+        left1 = setUp(num);
+        left2 = setUp(num);
+        left3 = setUp(num);
+        left4 = setUp(num);
+
+        right1 = setUp(num);
+        right2 = setUp(num);
+        right3 = setUp(num);
+        right4 = setUp(num);
+    }
+
+    public BufferedImage setUp(int num) {
+        BufferedImage image = null;
+        UtilityTool uTool = new UtilityTool();
+
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            up3 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            up4 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            down3 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            down4 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            left3 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            left4 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            right3 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            right4 = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-
+            image = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
+            image = uTool.scaleImage(image, 48, 48);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return image;
     }
-
 }

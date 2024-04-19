@@ -1,14 +1,34 @@
 package Controller;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class UtilityTool {
 
     public BufferedImage scaleImage(BufferedImage image, int width, int height) {
-        BufferedImage scale = new BufferedImage(width, height, image.getType());
-        Graphics2D g2 = (Graphics2D) scale.getGraphics();
-        g2.drawImage(scale, 0, 0, width, height, null);
-        return scale;
+        GraphicsConfiguration gfxConfig = GraphicsEnvironment.
+                getLocalGraphicsEnvironment().getDefaultScreenDevice().
+                getDefaultConfiguration();
+
+        /*
+         * if image is already compatible and optimized for current system
+         * settings, simply return it
+         */
+        if (image.getColorModel().equals(gfxConfig.getColorModel()))
+            return image;
+
+        // image is not optimized, so create a new image that is
+        BufferedImage newImage = gfxConfig.createCompatibleImage(
+                width, height, image.getTransparency());
+
+        // get the graphics context of the new image to draw the old image on
+        Graphics2D g2d = newImage.createGraphics();
+
+        // actually draw the image and dispose of context no longer needed
+        g2d.drawImage(image, 0, 0, width, height, null);
+        g2d.dispose();
+
+        // return the new optimized image
+        return newImage;
     }
 }

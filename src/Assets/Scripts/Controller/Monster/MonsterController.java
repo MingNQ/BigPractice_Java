@@ -3,8 +3,7 @@ package Controller.Monster;
 import Model.Monster;
 import View.GameView;
 
-import java.awt.Graphics2D;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -20,8 +19,8 @@ public class MonsterController {
     public MonsterController(GameView gp) {
         this.gp = gp;
         this.ms = new Monster();
-        ms.targetPosX = gp.screenWidth/2;
-        ms.targetPosY = gp.screenHeight/2;
+        ms.targetPosX = gp.screenWidth / 2;
+        ms.targetPosY = gp.screenHeight / 2;
         setDefaultValue();
     }
 
@@ -73,8 +72,8 @@ public class MonsterController {
     public void draw(Graphics2D g2) {
         double tmpPosX = ms.posX + 8;
         double tmpPosY = ms.posY + 16;
-        double shadowScaleX = gp.tileSize/ms.shadow.getWidth();
-        double shadowScaleY = gp.tileSize/ms.shadow.getHeight();
+        double shadowScaleX = gp.tileSize / ms.shadow.getWidth();
+        double shadowScaleY = gp.tileSize / ms.shadow.getHeight();
 
         BufferedImage image = null;
 
@@ -89,11 +88,11 @@ public class MonsterController {
             g2.drawImage(ms.shadow, at, null);
 
             at = AffineTransform.getTranslateInstance(ms.posX, ms.posY);
-            at.scale(monsterScaleX , monsterScaleY);
+            at.scale(monsterScaleX, monsterScaleY);
             g2.drawImage(image, at, null);
 
             g2.setColor(Color.pink);
-            g2.drawRect((int)ms.hitbox.x,(int) ms.hitbox.y, (int)ms.hitbox.width,(int)ms.hitbox.height);
+            g2.drawRect((int) ms.hitbox.x, (int) ms.hitbox.y, (int) ms.hitbox.width, (int) ms.hitbox.height);
         }
     }
 

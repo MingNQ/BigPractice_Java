@@ -1,20 +1,17 @@
 package View;
 
+import Controller.Character.PlayerController;
 import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
-import Controller.Character.PlayerController;
 import Controller.Event.Score;
 import Controller.Item.ItemController;
-import Controller.Monster.MonsterController;
 import Controller.Monster.ProjectileController;
 import Controller.TileSet.TileManager;
 
 import javax.swing.*;
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.*;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class GameView extends JPanel implements Runnable {
     // CONSTANT var
@@ -38,7 +35,6 @@ public class GameView extends JPanel implements Runnable {
     public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
     public ItemController itemController = new ItemController(this);
-    public LinkedList<MonsterController> monsterList = new LinkedList<>();
     public LinkedList<ProjectileController> projectilePool = new LinkedList<>();
     public Score score = new Score(this);
 
@@ -56,7 +52,7 @@ public class GameView extends JPanel implements Runnable {
         gameThread.start();
     }
 
-//    "DELTA" method
+    //    "DELTA" method
     @Override
     public void run() {
         // FPS of game
@@ -70,7 +66,7 @@ public class GameView extends JPanel implements Runnable {
 
         setUpGame();
 
-        while(gameThread != null) {
+        while (gameThread != null) {
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -98,8 +94,7 @@ public class GameView extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
-//        monsterList.add(new MonsterController(this));
-//        projectilePool.add(new ProjectileController(this));
+        projectilePool.add(new ProjectileController(this));
     }
 
     // Update is called 60 per frame
@@ -108,24 +103,24 @@ public class GameView extends JPanel implements Runnable {
         playerController.update(); // Update player
 
         // Update projectile
-//        if (canSpawn()) {
-//            ProjectileController tmp = new ProjectileController(this);
-//            projectilePool.add(tmp);
-//        }
-//        Iterator<ProjectileController> it = projectilePool.iterator();
-//
-//        while (it.hasNext()) {
-//            ProjectileController curr = it.next();
-//            curr.update();
-//
-//            if (curr.isOutRange()) {
-//                it.remove();
-//            }
-//
-//            // Check if collide
-//            if (collisionManager.checkCollide(playerController.player, curr.projectile))
-//                System.exit(1);
-//        }
+        if (canSpawn()) {
+            ProjectileController tmp = new ProjectileController(this);
+            projectilePool.add(tmp);
+        }
+        Iterator<ProjectileController> it = projectilePool.iterator();
+
+        while (it.hasNext()) {
+            ProjectileController curr = it.next();
+            curr.update();
+
+            if (curr.isOutRange()) {
+                it.remove();
+            }
+
+            // Check if collide
+            if (collisionManager.checkCollide(playerController.player, curr.projectile))
+                System.exit(1);
+        }
 
 
         // Update monster
@@ -155,14 +150,14 @@ public class GameView extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Graphics2D g2 = (Graphics2D)g; // Convert graphics to graphics2D
+        Graphics2D g2 = (Graphics2D) g; // Convert graphics to graphics2D
 
         tileM.draw(g2); // Draw tile set background
         playerController.draw(g2); // Draw player
         // Draw projectile
-//        for (ProjectileController pt : projectilePool) {
-//            pt.draw(g2);
-//        }
+        for (ProjectileController pt : projectilePool) {
+            pt.draw(g2);
+        }
         // Draw monster
 
         itemController.draw(g2);// Draw item

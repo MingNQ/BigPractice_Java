@@ -3,7 +3,7 @@ package Controller.Monster;
 import Model.Projectile;
 import View.GameView;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -97,7 +97,6 @@ public class ProjectileController {
         // If alive can draw and vice versa
         image = projectile.drawAnimation();
         AffineTransform at = AffineTransform.getTranslateInstance(projectile.posX, projectile.posY);
-        at.scale((double)gp.tileSize / image.getWidth() , (double)gp.tileSize / image.getHeight());
         g2.drawImage(image, at, null);
     }
 

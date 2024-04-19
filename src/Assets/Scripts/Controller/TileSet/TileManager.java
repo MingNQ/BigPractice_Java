@@ -4,7 +4,7 @@ import Model.Tile;
 import View.GameView;
 
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +28,9 @@ public class TileManager {
         try {
             // Import tile set
             // Grass
-            for(int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 tile[i] = new Tile();
-                tile[i].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/grass_0" + (i+1) + ".png")));
+                tile[i].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/grass_0" + (i + 1) + ".png")));
             }
             // Tree
             tile[5] = new Tile();
@@ -84,7 +84,7 @@ public class TileManager {
         // Draw map with grass
         while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
             int tileNum = layerMapTileFirst[col][row];
-            g2.drawImage(tile[tileNum].getImage(), x, y, gp.tileSize, gp.tileSize,null);
+            g2.drawImage(tile[tileNum].getImage(), x, y, gp.tileSize, gp.tileSize, null);
             col++;
             x += gp.tileSize;
             if (col == gp.maxScreenCol) {
