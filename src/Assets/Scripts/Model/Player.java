@@ -3,7 +3,6 @@ package Model;
 import Controller.UtilityTool;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -34,31 +33,6 @@ public class Player extends Entity {
         right4 = setUp(character, "right_4");
 
         shadow = setUp(character, "Shadow_player");
-//        try {
-//            down1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_1.png"));
-//            down2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_2.png"));
-//            down3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_3.png"));
-//            down4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/down_4.png"));
-//
-//            left1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_1.png"));
-//            left2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_2.png"));
-//            left3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_3.png"));
-//            left4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/left_4.png"));
-//
-//            right1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_1.png"));
-//            right2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_2.png"));
-//            right3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_3.png"));
-//            right4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/right_4.png"));
-//
-//            up1 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_1.png"));
-//            up2 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_2.png"));
-//            up3 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_3.png"));
-//            up4 = ImageIO.read(getClass().getResourceAsStream("/Characters/"+ character + "/up_4.png"));
-//
-//            shadow = ImageIO.read(getClass().getResourceAsStream("/Characters/Shadow_player.png"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public BufferedImage setUp(String character, String path) {
@@ -66,8 +40,8 @@ public class Player extends Entity {
         UtilityTool uTool = new UtilityTool();
 
         try {
-          image = ImageIO.read(getClass().getResourceAsStream("/Characters/" + character + "/" + path + ".png"));
-          image = uTool.scaleImage(image, 48, 48);
+            image = ImageIO.read(getClass().getResourceAsStream("/Characters/" + character + "/" + path + ".png"));
+            image = uTool.scaleImage(image, 48, 48);
         } catch (IOException e) {
             e.printStackTrace();
         }

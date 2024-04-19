@@ -3,15 +3,13 @@ package Controller.Character;
 import Controller.Event.KeyHandler;
 import Controller.Item.ItemFlashController;
 import Controller.Item.ItemGhostController;
-import Model.Entity;
 import Model.Player;
 import View.GameView;
-import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class PlayerController {
     public Player player;
@@ -32,8 +30,8 @@ public class PlayerController {
 
     // Default value
     public void setDefaultValues() {
-        player.posX = gp.screenWidth/2;
-        player.posY = gp.screenHeight/2;
+        player.posX = gp.screenWidth / 2;
+        player.posY = gp.screenHeight / 2;
         player.speed = 5;
         player.direction = "down";
         isUsed = false;
@@ -92,22 +90,16 @@ public class PlayerController {
 
         double tmpPosX = player.posX + 8;
         double tmpPosY = player.posY + 28;
-        double shadowScaleX = gp.tileSize / player.shadow.getWidth();
-        double shadowScaleY = gp.tileSize / player.shadow.getHeight();
-        double playerScaleX = (double)gp.tileSize / image.getWidth();
-        double playerScaleY = (double)gp.tileSize / image.getHeight();
+        double shadowScaleX = (gp.tileSize / player.shadow.getWidth()) * 0.75;
+        double shadowScaleY = (gp.tileSize / player.shadow.getHeight()) * 0.75;
 
         // Draw player's image
         AffineTransform at = AffineTransform.getTranslateInstance(tmpPosX, tmpPosY);
-//        at.scale(shadowScaleX, shadowScaleY);
+        at.scale(shadowScaleX, shadowScaleY);
         g2.drawImage(player.shadow, at, null);
 
         at = AffineTransform.getTranslateInstance(player.posX, player.posY);
-//        at.scale(playerScaleX, playerScaleY);
         g2.drawImage(image, at, null);
-
-//        g2.setColor(Color.red);
-//        g2.drawRect((int)player.hitbox.x, (int)player.hitbox.y, (int)player.hitbox.width, (int)player.hitbox.height);
     }
 
     // Player use item
@@ -124,7 +116,8 @@ public class PlayerController {
                 player.posY = player.posY + gp.tileSize;
             } else if (player.direction == "left") {
                 player.posX = player.posX - gp.tileSize;
-                player.posY = player.posY;;
+                player.posY = player.posY;
+                ;
             } else if (player.direction == "right") {
                 player.posX = player.posX + gp.tileSize;
                 player.posY = player.posY;

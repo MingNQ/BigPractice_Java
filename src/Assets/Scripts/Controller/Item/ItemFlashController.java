@@ -1,7 +1,6 @@
 package Controller.Item;
 
 import Controller.Character.PlayerController;
-import View.GameView;
 
 public class ItemFlashController {
     private double flashCoolDown = 45; // Cooldown

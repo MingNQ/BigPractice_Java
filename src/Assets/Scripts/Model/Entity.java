@@ -20,9 +20,9 @@ public class Entity {
     public double targetDistance;
 
     // Render image
-    public BufferedImage up1   , up2   , up3   , up4;
-    public BufferedImage down1 , down2 , down3 , down4;
-    public BufferedImage left1 , left2 , left3 , left4;
+    public BufferedImage up1, up2, up3, up4;
+    public BufferedImage down1, down2, down3, down4;
+    public BufferedImage left1, left2, left3, left4;
     public BufferedImage right1, right2, right3, right4;
     public BufferedImage shadow;
 
@@ -52,6 +52,7 @@ public class Entity {
             spriteCount = 0;
         }
     }
+
     public BufferedImage drawAnimation() {
         BufferedImage image = null;
 
@@ -127,30 +128,30 @@ public class Entity {
 
 
     public void moveUpLeft() {
-        posY -= speed/SQRT2;
-        hitbox.y -= speed/SQRT2;
-        posX -= speed/SQRT2;
-        hitbox.x -= speed/SQRT2;
+        posY -= speed / SQRT2;
+        hitbox.y -= speed / SQRT2;
+        posX -= speed / SQRT2;
+        hitbox.x -= speed / SQRT2;
     }
 
     public void moveUpRight() {
-        posY -= speed/SQRT2;
-        hitbox.y -= speed/SQRT2;
-        posX += speed/SQRT2;
-        hitbox.x += speed/SQRT2;
+        posY -= speed / SQRT2;
+        hitbox.y -= speed / SQRT2;
+        posX += speed / SQRT2;
+        hitbox.x += speed / SQRT2;
     }
 
     public void moveDownLeft() {
-        posY += speed/SQRT2;
-        hitbox.y += speed/SQRT2;
-        posX -= speed/SQRT2;
-        hitbox.x -= speed/SQRT2;
+        posY += speed / SQRT2;
+        hitbox.y += speed / SQRT2;
+        posX -= speed / SQRT2;
+        hitbox.x -= speed / SQRT2;
     }
 
     public void moveDownRight() {
-        posY += speed/SQRT2;
-        hitbox.y += speed/SQRT2;
-        posX += speed/SQRT2;
-        hitbox.x += speed/SQRT2;
+        posY += speed / SQRT2;
+        hitbox.y += speed / SQRT2;
+        posX += speed / SQRT2;
+        hitbox.x += speed / SQRT2;
     }
 }
