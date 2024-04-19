@@ -1,7 +1,6 @@
 package Controller.Monster;
 
 import Model.Monster;
-import Model.Projectile;
 import View.GameView;
 
 import java.awt.Graphics2D;
@@ -16,7 +15,6 @@ public class MonsterController {
 
     // Monsters
     public Monster ms;
-    public Projectile projectile;
     public GameView gp;
 
     public MonsterController(GameView gp) {
@@ -33,7 +31,6 @@ public class MonsterController {
         ms.targetDistance = 400;
         ms.startPosX = ms.posX;
         ms.startPosY = ms.posY;
-        ms.alive = true;
 
         double monRecPosX = ms.posX + 12;
         double monRecPosY = ms.posY + 16;
@@ -81,12 +78,7 @@ public class MonsterController {
 
         BufferedImage image = null;
 
-        if (ms.alive)
-            image = ms.drawAnimation();
-        else if (!ms.alive) {
-//            image = null;
-            g2.dispose();
-        }
+        image = ms.drawAnimation();
 
         if (image != null) {
             double monsterScaleX = gp.tileSize / image.getWidth();
@@ -107,10 +99,7 @@ public class MonsterController {
 
     // Update property per frame
     public void update() {
-        if (ms.isReachTargetDistance() && !ms.isReachTargetPos()) {
-            ms.alive = false;
-        } else if (!ms.isReachTargetDistance()) {
-            if (ms.isReachTargetPos()) ms.alive = false;
+        if (!ms.isReachTargetDistance()) {
             switch (ms.spawnSide) {
                 case 0: // Spawn from up
                     ms.moveFromUp();

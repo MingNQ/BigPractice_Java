@@ -3,9 +3,9 @@ package View;
 import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
 import Controller.Character.PlayerController;
+import Controller.Event.Score;
 import Controller.Item.ItemController;
 import Controller.Monster.MonsterController;
-import Controller.Monster.MonsterPool;
 import Controller.Monster.ProjectileController;
 import Controller.TileSet.TileManager;
 
@@ -14,7 +14,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.util.*;
 
 public class GameView extends JPanel implements Runnable {
     // CONSTANT var
@@ -35,13 +35,12 @@ public class GameView extends JPanel implements Runnable {
     public KeyHandler keyH = new KeyHandler();
     public Thread gameThread;
 
-//    public AssetsSetup asset = new AssetsSetup(this);
     public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
     public ItemController itemController = new ItemController(this);
-    public ProjectileController projectileController = new ProjectileController(this);
-    public ArrayList<MonsterController> monsterList = new ArrayList<>();
-    public MonsterPool monsterPool = new MonsterPool(this);
+    public LinkedList<MonsterController> monsterList = new LinkedList<>();
+    public LinkedList<ProjectileController> projectilePool = new LinkedList<>();
+    public Score score = new Score(this);
 
     public GameView() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Set size for screen
@@ -78,7 +77,6 @@ public class GameView extends JPanel implements Runnable {
             timer += (currentTime - lastTime);
             lastTime = System.nanoTime();
 
-
             if (delta >= 1) {
                 // 1. UPDATE: update information
                 update(); // Call update method
@@ -100,37 +98,57 @@ public class GameView extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
-        for (int i = 0; i < 5; i++) {
-            monsterList.add(monsterPool.getMonster());
-        }
+//        monsterList.add(new MonsterController(this));
+//        projectilePool.add(new ProjectileController(this));
     }
 
     // Update is called 60 per frame
     public void update() {
+        score.update(); // Update time and score
         playerController.update(); // Update player
 
-        projectileController.update(); // Update projectile
+        // Update projectile
+//        if (canSpawn()) {
+//            ProjectileController tmp = new ProjectileController(this);
+//            projectilePool.add(tmp);
+//        }
+//        Iterator<ProjectileController> it = projectilePool.iterator();
+//
+//        while (it.hasNext()) {
+//            ProjectileController curr = it.next();
+//            curr.update();
+//
+//            if (curr.isOutRange()) {
+//                it.remove();
+//            }
+//
+//            // Check if collide
+//            if (collisionManager.checkCollide(playerController.player, curr.projectile))
+//                System.exit(1);
+//        }
 
-        // Check if collide
-        if (collisionManager.checkCollide(playerController.player, projectileController.projectile))
-            System.exit(1);
 
         // Update monster
-        if (monsterList.isEmpty()) {
-            for (int i = 0; i < 5; i++) {
-                monsterList.add(monsterPool.getMonster());
-            }
-        }
-
-        for (MonsterController mons : monsterList) {
-            mons.update();
-            if (collisionManager.checkCollide(playerController.player, mons.ms)) {
-                System.exit(1);
-            }
-            if (!mons.ms.alive) {
-                mons.setDefaultValue();
-            }
-        }
+//        Iterator<MonsterController> iterator = monsterList.iterator();
+//
+//        while(iterator.hasNext()) {
+//            MonsterController curr = iterator.next();
+//        }
+//        if (monsterList.isEmpty()) {
+//            for (int i = 0; i < 5; i++) {
+//                monsterList.add(monsterPool.getMonster());
+//            }
+//        }
+//
+//        for (MonsterController mons : monsterList) {
+//            mons.update();
+//            if (collisionManager.checkCollide(playerController.player, mons.ms)) {
+//                System.exit(1);
+//            }
+//            if (!mons.ms.alive) {
+//                mons.setDefaultValue();
+//            }
+//        }
     }
 
     // Draw component
@@ -141,17 +159,20 @@ public class GameView extends JPanel implements Runnable {
 
         tileM.draw(g2); // Draw tile set background
         playerController.draw(g2); // Draw player
-        itemController.draw(g2);// Draw item
-        projectileController.draw(g2); // Draw projectile
-
+        // Draw projectile
+//        for (ProjectileController pt : projectilePool) {
+//            pt.draw(g2);
+//        }
         // Draw monster
-        for (MonsterController mons : monsterList) {
-            mons.draw(g2);
-            if (!mons.ms.alive) {
-                mons.setDefaultValue();
-            }
-        }
 
+        itemController.draw(g2);// Draw item
         g2.dispose(); // Release system resource that is using
+    }
+
+    public boolean canSpawn() {
+        if (score.isPivotTime()) {
+            return true;
+        }
+        return false;
     }
 }

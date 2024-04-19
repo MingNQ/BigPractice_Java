@@ -1,7 +1,6 @@
 package Controller.Event;
 
 import Model.Entity;
-import Model.Item;
 import View.GameView;
 
 public class CollisionManager {
