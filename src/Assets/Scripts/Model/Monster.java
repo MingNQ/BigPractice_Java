@@ -4,11 +4,6 @@ import javax.imageio.ImageIO;
 import java.util.Objects;
 
 public class Monster extends Entity {
-    // Default value
-    public double targetPosX, targetPosY;
-    public double startPosX, startPosY;
-    public int spawnSide;
-    public double targetDistance;
 
     // Constructor
     public Monster() {

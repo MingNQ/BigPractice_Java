@@ -1,6 +1,5 @@
 package Model;
 
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -13,9 +12,12 @@ public class Entity {
     public double posX, posY;
     public double speed;
     public String direction;
-    public boolean alive;
-    public int maxLife;
-    public int life;
+
+    // Default value for monster & projectile
+    public double targetPosX, targetPosY;
+    public double startPosX, startPosY;
+    public int spawnSide;
+    public double targetDistance;
 
     // Render image
     public BufferedImage up1   , up2   , up3   , up4;
@@ -55,6 +57,8 @@ public class Entity {
 
         switch (direction) {
             case "up":
+            case "up_right":
+            case "up_left":
                 if (spriteNum == 1 || spriteNum == 5 || spriteNum == 9)
                     image = up1;
                 if (spriteNum == 2 || spriteNum == 6 || spriteNum == 10)
@@ -65,6 +69,8 @@ public class Entity {
                     image = up4;
                 break;
             case "down":
+            case "down_right":
+            case "down_left":
                 if (spriteNum == 1 || spriteNum == 5 || spriteNum == 9)
                     image = down1;
                 if (spriteNum == 2 || spriteNum == 6 || spriteNum == 10)

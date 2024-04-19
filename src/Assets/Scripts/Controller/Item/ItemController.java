@@ -3,9 +3,7 @@ package Controller.Item;
 import Model.Item;
 import View.GameView;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 public class ItemController {
     private Item item;

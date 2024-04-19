@@ -7,7 +7,7 @@ import Model.Entity;
 import Model.Player;
 import View.GameView;
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -36,7 +36,6 @@ public class PlayerController {
         player.posY = gp.screenHeight/2;
         player.speed = 5;
         player.direction = "down";
-        player.alive = true;
         isUsed = false;
 
         double playerRecPosX = player.posX + 12;
@@ -100,15 +99,15 @@ public class PlayerController {
 
         // Draw player's image
         AffineTransform at = AffineTransform.getTranslateInstance(tmpPosX, tmpPosY);
-        at.scale(shadowScaleX, shadowScaleY);
+//        at.scale(shadowScaleX, shadowScaleY);
         g2.drawImage(player.shadow, at, null);
 
         at = AffineTransform.getTranslateInstance(player.posX, player.posY);
-        at.scale(playerScaleX, playerScaleY);
+//        at.scale(playerScaleX, playerScaleY);
         g2.drawImage(image, at, null);
 
-        g2.setColor(Color.red);
-        g2.drawRect((int)player.hitbox.x, (int)player.hitbox.y, (int)player.hitbox.width, (int)player.hitbox.height);
+//        g2.setColor(Color.red);
+//        g2.drawRect((int)player.hitbox.x, (int)player.hitbox.y, (int)player.hitbox.width, (int)player.hitbox.height);
     }
 
     // Player use item
