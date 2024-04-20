@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.UtilityTool;
+import Controller.UI.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,6 +31,10 @@ public class Projectile extends Entity {
         right2 = setUp(num);
         right3 = setUp(num);
         right4 = setUp(num);
+    }
+
+    public void getImage() {
+
     }
 
     public BufferedImage setUp(int num) {

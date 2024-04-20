@@ -5,8 +5,9 @@ import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
 import Controller.Event.Score;
 import Controller.Item.ItemController;
-import Controller.Monster.ProjectileController;
+import Controller.Projectile.ProjectileController;
 import Controller.TileSet.TileManager;
+import Controller.UI.UIController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,7 @@ public class GameView extends JPanel implements Runnable {
 
     // Instantiate
     public TileManager tileM = new TileManager(this);
-    public KeyHandler keyH = new KeyHandler();
+    public KeyHandler keyH = new KeyHandler(this);
     public Thread gameThread;
 
     public CollisionManager collisionManager = new CollisionManager(this);
@@ -37,6 +38,14 @@ public class GameView extends JPanel implements Runnable {
     public ItemController itemController = new ItemController(this);
     public LinkedList<ProjectileController> projectilePool = new LinkedList<>();
     public Score score = new Score(this);
+
+    // Game state
+    public int gameState;
+    public final int playState = 1;
+    public final int gameEndState = 2;
+
+    // UI
+    public UIController ui = new UIController(this);
 
     public GameView() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Set size for screen
@@ -65,7 +74,6 @@ public class GameView extends JPanel implements Runnable {
         int drawCount = 0;
 
         setUpGame();
-
         while (gameThread != null) {
             currentTime = System.nanoTime();
 
@@ -94,62 +102,42 @@ public class GameView extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
+        gameState = playState;
         projectilePool.add(new ProjectileController(this));
     }
 
     // Update is called 60 per frame
     public void update() {
-        score.update(); // Update time and score
-        playerController.update(); // Update player
+        // Check if state is playing
+        if (gameState == playState) {
+            score.update(); // Update time and score
+            playerController.update(); // Update player
 
-        // Update projectile
-        if (canSpawn()) {
-            ProjectileController tmp = new ProjectileController(this);
-            projectilePool.add(tmp);
-        }
-        Iterator<ProjectileController> it = projectilePool.iterator();
-
-        while (it.hasNext()) {
-            ProjectileController curr = it.next();
-            curr.update();
-
-            if (curr.isOutRange()) {
-                it.remove();
+            // Update projectile
+            if (canSpawn()) {
+                ProjectileController tmp = new ProjectileController(this);
+                projectilePool.add(tmp);
             }
+            Iterator<ProjectileController> it = projectilePool.iterator();
 
-            // Check if collide
-            if (collisionManager.checkCollide(playerController.player, curr.projectile))
-                System.exit(1);
+            while (it.hasNext()) {
+                ProjectileController curr = it.next();
+                curr.update();
+
+                if (curr.isOutRange()) {
+                    it.remove();
+                }
+
+                // Check if collide
+                if (collisionManager.checkCollide(playerController.player, curr.projectile))
+                    System.exit(1);
+            }
         }
-
-
-        // Update monster
-//        Iterator<MonsterController> iterator = monsterList.iterator();
-//
-//        while(iterator.hasNext()) {
-//            MonsterController curr = iterator.next();
-//        }
-//        if (monsterList.isEmpty()) {
-//            for (int i = 0; i < 5; i++) {
-//                monsterList.add(monsterPool.getMonster());
-//            }
-//        }
-//
-//        for (MonsterController mons : monsterList) {
-//            mons.update();
-//            if (collisionManager.checkCollide(playerController.player, mons.ms)) {
-//                System.exit(1);
-//            }
-//            if (!mons.ms.alive) {
-//                mons.setDefaultValue();
-//            }
-//        }
     }
 
     // Draw component
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g; // Convert graphics to graphics2D
 
         tileM.draw(g2); // Draw tile set background
@@ -158,12 +146,14 @@ public class GameView extends JPanel implements Runnable {
         for (ProjectileController pt : projectilePool) {
             pt.draw(g2);
         }
-        // Draw monster
 
         itemController.draw(g2);// Draw item
+        score.draw(g2); // Draw score
+        ui.draw(g2);
         g2.dispose(); // Release system resource that is using
     }
 
+    // Check if ball can spawn
     public boolean canSpawn() {
         if (score.isPivotTime()) {
             return true;

@@ -1,5 +1,6 @@
-package Controller.Monster;
+package Controller.Projectile;
 
+import Model.Ball;
 import Model.Projectile;
 import View.GameView;
 
@@ -15,7 +16,7 @@ public class ProjectileController {
 
     GameView gp;
     Random rd = new Random();
-    public Projectile projectile = new Projectile();
+    public Projectile projectile = new Ball();
 
     // Constructor
     public ProjectileController(GameView gp) {
@@ -102,6 +103,7 @@ public class ProjectileController {
 
     // Update per frame
     public void update() {
+        // Check if ball is in screen => can update and vice versa
         if (!isOutRange()) {
             projectile.posX += xDir * projectile.speed;
             projectile.hitbox.x += xDir * projectile.speed;

@@ -1,19 +1,21 @@
 package Controller.TileSet;
 
+import Controller.UI.UtilityTool;
 import Model.Tile;
 import View.GameView;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class TileManager {
-    GameView gp;
     public Tile[] tile; // Grass, Tree, Small grass
     public int[][] layerMapTileFirst; // Store base map tile with grass and small grass
+    GameView gp;
 
     public TileManager(GameView gp) {
         this.gp = gp;
@@ -25,26 +27,38 @@ public class TileManager {
 
     // Upload image
     public void getTileImage() {
-        try {
-            // Import tile set
-            // Grass
-            for (int i = 0; i < 4; i++) {
-                tile[i] = new Tile();
-                tile[i].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/grass_0" + (i + 1) + ".png")));
-            }
-            // Tree
-            tile[5] = new Tile();
-            tile[5].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/Tree_01.png")));
-            tile[5].setCollision(true);
+        // Import tile set
+        // Grass
+        for (int i = 0; i < 4; i++) {
+            tile[i] = new Tile();
+            tile[i].setImage(setUp("/Background/TileSet/grass_0" + (i + 1) + ".png"));
+        }
 
-            tile[6] = new Tile();
-            tile[6].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/Shadow_tree_01.png")));
-            // Small grass
-            tile[7] = new Tile();
-            tile[7].setImage(ImageIO.read(getClass().getResourceAsStream("/Background/TileSet/small_grass_01.png")));
+        // Tree
+        tile[5] = new Tile();
+        tile[5].setImage(setUp("/Background/TileSet/Tree_01.png"));
+
+        tile[6] = new Tile();
+        tile[6].setImage(setUp("/Background/TileSet/Tree_01.png"));
+
+        // Small grass
+        tile[7] = new Tile();
+        tile[7].setImage(setUp("/Background/TileSet/small_grass_01.png"));
+
+    }
+
+    public BufferedImage setUp(String path) {
+        BufferedImage image = null;
+        UtilityTool uTool = new UtilityTool();
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(path));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return image;
     }
 
     // Load map tile
@@ -84,7 +98,7 @@ public class TileManager {
         // Draw map with grass
         while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
             int tileNum = layerMapTileFirst[col][row];
-            g2.drawImage(tile[tileNum].getImage(), x, y, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(tile[tileNum].getImage(), x, y, null);
             col++;
             x += gp.tileSize;
             if (col == gp.maxScreenCol) {
@@ -94,10 +108,6 @@ public class TileManager {
                 y += gp.tileSize;
             }
         }
-
-        // Draw something else
-//        g2.drawImage(tile[6].getImage(), -12, 0, gp.tileSize * 3, gp.tileSize * 3, null);
-//        g2.drawImage(tile[5].getImage(), -24, -48, gp.tileSize * 3, gp.tileSize * 3, null);
     }
 
     /* MAP

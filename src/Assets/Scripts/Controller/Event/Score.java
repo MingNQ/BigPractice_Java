@@ -31,8 +31,11 @@ public class Score {
     }
 
     public void draw(Graphics2D g2) {
-        String point = score + "";
+        g2.setFont(new Font("Brick Sans", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
-        g2.drawString(point, gp.screenWidth / 2, 0);
+        String res = score / 100 + "";
+        int length = (int) g2.getFontMetrics().getStringBounds(res, g2).getWidth();
+        int x = gp.screenWidth / 2 - length / 2;
+        g2.drawString(res, x, 50);
     }
 }

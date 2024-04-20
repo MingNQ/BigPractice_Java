@@ -128,7 +128,7 @@ public class PlayerController {
         if (keyH.secondSkillPressed && ghost.isAvailable()) {
             double buff = 1.2;
             ghost.use();
-            player.speed = player.speed * 1.2;
+            player.speed = player.speed * buff;
             System.out.println("Player use Ghost! Speed is " + player.speed);
         }
     }
