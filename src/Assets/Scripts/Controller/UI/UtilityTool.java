@@ -1,4 +1,4 @@
-package Controller;
+package Controller.UI;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

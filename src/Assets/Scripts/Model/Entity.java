@@ -106,6 +106,8 @@ public class Entity {
     }
     // END: Animation
 
+
+    // BEGIN: MOVEMENT
     public void moveUp() {
         posY = posY - speed;
         hitbox.y -= speed;
@@ -154,4 +156,5 @@ public class Entity {
         posX += speed / SQRT2;
         hitbox.x += speed / SQRT2;
     }
+    // END: MOVEMENT
 }
