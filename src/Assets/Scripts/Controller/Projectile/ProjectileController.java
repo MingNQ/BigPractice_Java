@@ -1,4 +1,4 @@
-package Controller.Monster;
+package Controller.Projectile;
 
 import Model.Ball;
 import Model.Projectile;

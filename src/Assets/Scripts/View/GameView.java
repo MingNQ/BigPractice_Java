@@ -5,7 +5,7 @@ import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
 import Controller.Event.Score;
 import Controller.Item.ItemController;
-import Controller.Monster.ProjectileController;
+import Controller.Projectile.ProjectileController;
 import Controller.TileSet.TileManager;
 import Controller.UI.UIController;
 
