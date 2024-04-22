@@ -1,17 +1,17 @@
 package Controller.Event;
 
-import View.GameView;
+import View.GamePanel;
 
 import java.awt.*;
 
 public class Score {
-    GameView gp;
+    GamePanel gp;
     private long startTime;
     private long score;
     private long timeCounter;
     private long timePivot;
 
-    public Score(GameView gp) {
+    public Score(GamePanel gp) {
         this.gp = gp;
         this.startTime = System.currentTimeMillis();
         this.timePivot = 500;

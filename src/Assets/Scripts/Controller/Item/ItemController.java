@@ -1,16 +1,16 @@
 package Controller.Item;
 
 import Model.Item;
-import View.GameView;
+import View.GamePanel;
 
 import java.awt.*;
 
 public class ItemController {
     private Item item;
 
-    GameView gp;
+    GamePanel gp;
 
-    public ItemController(GameView gp) {
+    public ItemController(GamePanel gp) {
         this.gp = gp;
         item = new Item();
     }

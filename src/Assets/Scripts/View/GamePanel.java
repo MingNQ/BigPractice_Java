@@ -5,7 +5,9 @@ import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
 import Controller.Event.Score;
 import Controller.Item.ItemController;
-import Controller.Projectile.ProjectileController;
+import Controller.Projectile.BallPool;
+import Controller.Projectile.BallController;
+import Controller.Projectile.LaserController;
 import Controller.TileSet.TileManager;
 import Controller.UI.UIController;
 
@@ -14,14 +16,13 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class GameView extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements Runnable {
     // CONSTANT var
     public static final long ONE_BILL = 1000000000;
 
     // SCREEN SETTINGS
     private final int originalTileSize = 16; // 16x16px tile
     private final int scale = 3;
-
     public final int tileSize = originalTileSize * scale; // 48x48px
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
@@ -32,12 +33,14 @@ public class GameView extends JPanel implements Runnable {
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     public Thread gameThread;
-
     public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
     public ItemController itemController = new ItemController(this);
-    public LinkedList<ProjectileController> projectilePool = new LinkedList<>();
+    public LinkedList<BallController> projectileList = new LinkedList<>();
+    public BallPool projectilePool = new BallPool(this);
     public Score score = new Score(this);
+
+    public LaserController laserController = new LaserController(this);
 
     // Game state
     public int gameState;
@@ -47,7 +50,7 @@ public class GameView extends JPanel implements Runnable {
     // UI
     public UIController ui = new UIController(this);
 
-    public GameView() {
+    public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Set size for screen
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // Improve rendering performance
@@ -61,7 +64,7 @@ public class GameView extends JPanel implements Runnable {
         gameThread.start();
     }
 
-    //    "DELTA" method
+    // "DELTA" method loop game
     @Override
     public void run() {
         // FPS of game
@@ -103,7 +106,7 @@ public class GameView extends JPanel implements Runnable {
     // Set up default entity
     public void setUpGame() {
         gameState = playState;
-        projectilePool.add(new ProjectileController(this));
+        projectileList.add(projectilePool.getBall());
     }
 
     // Update is called 60 per frame
@@ -113,25 +116,31 @@ public class GameView extends JPanel implements Runnable {
             score.update(); // Update time and score
             playerController.update(); // Update player
 
-            // Update projectile
-            if (canSpawn()) {
-                ProjectileController tmp = new ProjectileController(this);
-                projectilePool.add(tmp);
-            }
-            Iterator<ProjectileController> it = projectilePool.iterator();
+            // Update Ball Projectile
+//            if (canSpawn()) {
+//                projectileList.add(projectilePool.getBall());
+//            }
+//            Iterator<BallController> it = projectileList.iterator();
+//
+//            while (it.hasNext()) {
+//                BallController curr = it.next();
+//                curr.update();
+//
+//                if (curr.isOutRange()) {
+//                    it.remove();
+//                    projectilePool.returnBall(curr);
+//                }
+//
+//                // Check if collide
+//                if (collisionManager.checkCollide(playerController.player, curr.projectile))
+//                    System.exit(1);
+//            }
 
-            while (it.hasNext()) {
-                ProjectileController curr = it.next();
-                curr.update();
-
-                if (curr.isOutRange()) {
-                    it.remove();
-                }
-
-                // Check if collide
-                if (collisionManager.checkCollide(playerController.player, curr.projectile))
-                    System.exit(1);
-            }
+            // Update Laser Projectile
+            laserController.update();
+//            if (laserController.satCollision(laserController.projectile.hitbox, laserController.angle, playerController.player.hitbox, 0)) {
+//                System.out.println("Collide");
+//            }
         }
     }
 
@@ -141,11 +150,15 @@ public class GameView extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g; // Convert graphics to graphics2D
 
         tileM.draw(g2); // Draw tile set background
+        // Draw Laser Projectile
+        laserController.draw(g2);
+
         playerController.draw(g2); // Draw player
-        // Draw projectile
-        for (ProjectileController pt : projectilePool) {
-            pt.draw(g2);
-        }
+        // Draw Ball Projectile
+//        for (BallController pt : projectileList) {
+//            pt.draw(g2);
+//        }
+
 
         itemController.draw(g2);// Draw item
         score.draw(g2); // Draw score
@@ -155,9 +168,6 @@ public class GameView extends JPanel implements Runnable {
 
     // Check if ball can spawn
     public boolean canSpawn() {
-        if (score.isPivotTime()) {
-            return true;
-        }
-        return false;
+        return score.isPivotTime();
     }
 }

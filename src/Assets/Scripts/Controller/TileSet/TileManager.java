@@ -2,7 +2,7 @@ package Controller.TileSet;
 
 import Controller.UI.UtilityTool;
 import Model.Tile;
-import View.GameView;
+import View.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,9 +15,9 @@ import java.io.InputStreamReader;
 public class TileManager {
     public Tile[] tile; // Grass, Tree, Small grass
     public int[][] layerMapTileFirst; // Store base map tile with grass and small grass
-    GameView gp;
+    GamePanel gp;
 
-    public TileManager(GameView gp) {
+    public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[20];
         layerMapTileFirst = new int[gp.maxScreenCol][gp.maxScreenRow];

@@ -7,6 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Projectile extends Entity {
+    public int tileSize = 48;
+    public int imageWidth = tileSize * 4;
+    public int imageHeight = 960; // Sqrt(screenWidth*2 + screenHeight*2)
+
     public Projectile() {
         super();
     }
@@ -43,7 +47,7 @@ public class Projectile extends Entity {
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/projectile_0" + num + ".png"));
-            image = uTool.scaleImage(image, 48, 48);
+            image = uTool.scaleImage(image, tileSize, tileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }
