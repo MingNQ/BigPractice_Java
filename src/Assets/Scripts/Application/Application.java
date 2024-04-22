@@ -1,6 +1,6 @@
 package Application;
 
-import View.GameView;
+import View.GamePanel;
 
 import javax.swing.*;
 
@@ -16,11 +16,11 @@ public class Application {
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // CLOSE window and END run time
             window.setResizable(false); // Against resize window
 
-            GameView gameView = new GameView();
+            GamePanel gamePanel = new GamePanel();
 
-            window.add(gameView); // Add panel to main window
+            window.add(gamePanel); // Add panel to main window
             window.pack(); // Causes window to be sized to fit the preferred size
-            gameView.startGameThread(); // Start game loop
+            gamePanel.startGameThread(); // Start game loop
 
             window.setLocationRelativeTo(null); // Display on center
             window.setVisible(true);

@@ -1,6 +1,6 @@
 package Controller.Event;
 
-import View.GameView;
+import View.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,11 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class KeyHandler implements KeyListener, MouseListener {
-    GameView gp;
+    GamePanel gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed; // Control key event
     public boolean fistSkillPressed, secondSkillPressed;
 
-    public KeyHandler(GameView gp) {
+    public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
 
@@ -43,13 +43,6 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_K) {
             secondSkillPressed = true;
         }
-//        if (code == KeyEvent.VK_ESCAPE) {
-//            if (gp.gameState == gp.playState) {
-//                gp.gameState = gp.pauseState;
-//            } else if (gp.gameState == gp.pauseState){
-//                gp.gameState = gp.playState;
-//            }
-//        }
     }
 
     @Override

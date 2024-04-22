@@ -1,28 +1,21 @@
 package Controller.Projectile;
 
-import Model.Ball;
 import Model.Projectile;
-import View.GameView;
+import View.GamePanel;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class ProjectileController {
-    private double xDir = 4; // x direction
-    private double yDir = 4; // y direction
+    Random rd;
+    GamePanel gp;
+    public Projectile projectile = new Projectile();
 
-    GameView gp;
-    Random rd = new Random();
-    public Projectile projectile = new Ball();
+    public double xDir = 4; // x direction
+    public double yDir = 4; // y direction
 
-    // Constructor
-    public ProjectileController(GameView gp) {
+    public ProjectileController(GamePanel gp) {
         this.gp = gp;
-        setDefaultValue();
-        projectile.getImage(rd.nextInt(4));
     }
 
     // Set default value when call
@@ -33,19 +26,6 @@ public class ProjectileController {
 
         projectile.startPosX = projectile.posX;
         projectile.startPosY = projectile.posY;
-
-        double projectileRecPosX = projectile.posX + 14;
-        double projectileRecPosY = projectile.posY + 16;
-        double projectileRecW = projectile.recW - 12;
-        double projectileRecH = projectile.recH - 12;
-        projectile.hitbox = new Rectangle2D.Double(projectileRecPosX, projectileRecPosY, projectileRecW, projectileRecH);
-    }
-
-    // Check if projectile is out of screen
-    public boolean isOutRange() {
-        if (projectile.posX < -1 || projectile.posX > gp.screenWidth || projectile.posY < -1 || projectile.posY > gp.screenHeight)
-            return true;
-        return false;
     }
 
     // Set where target distance for projectile move to
@@ -68,50 +48,29 @@ public class ProjectileController {
                 projectile.direction = "down";
                 projectile.posX = rd.nextDouble(gp.screenWidth);
                 projectile.posY = -1;
-
                 break;
             case 1: // Spawn from down
                 projectile.direction = "up";
                 projectile.posX = rd.nextInt(gp.screenWidth);
                 projectile.posY = gp.screenHeight;
-
                 break;
             case 2: // Spawn from left
                 projectile.direction = "right";
                 projectile.posX = -1;
                 projectile.posY = rd.nextInt(gp.screenHeight);
-
                 break;
             case 3: // Spawn from right
                 projectile.direction = "left";
                 projectile.posX = gp.screenWidth;
                 projectile.posY = rd.nextInt(gp.screenHeight);
-
                 break;
         }
     }
 
-    // Draw image
-    public void draw(Graphics2D g2) {
-        BufferedImage image = null;
-
-        // If alive can draw and vice versa
-        image = projectile.drawAnimation();
-        AffineTransform at = AffineTransform.getTranslateInstance(projectile.posX, projectile.posY);
-        g2.drawImage(image, at, null);
-    }
-
-    // Update per frame
-    public void update() {
-        // Check if ball is in screen => can update and vice versa
-        if (!isOutRange()) {
-            projectile.posX += xDir * projectile.speed;
-            projectile.hitbox.x += xDir * projectile.speed;
-
-            projectile.posY += yDir * projectile.speed;
-            projectile.hitbox.y += yDir * projectile.speed;
-        }
-
-        projectile.setAnimations();
+    // Check if projectile is out of screen
+    public boolean isOutRange() {
+        if (projectile.posX < -1 || projectile.posX > gp.screenWidth || projectile.posY < -1 || projectile.posY > gp.screenHeight)
+            return true;
+        return false;
     }
 }

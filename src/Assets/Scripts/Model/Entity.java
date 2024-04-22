@@ -14,10 +14,10 @@ public class Entity {
     public String direction;
 
     // Default value for monster & projectile
-    public double targetPosX, targetPosY;
-    public double startPosX, startPosY;
-    public int spawnSide;
-    public double targetDistance;
+    public double targetPosX, targetPosY; // Store target position
+    public double startPosX, startPosY; // Store start position
+    public int spawnSide; // Side where projectile will spawn
+    public String state; // State that projectile is
 
     // Render image
     public BufferedImage up1, up2, up3, up4;

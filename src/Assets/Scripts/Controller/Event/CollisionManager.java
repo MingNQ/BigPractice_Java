@@ -1,12 +1,12 @@
 package Controller.Event;
 
 import Model.Entity;
-import View.GameView;
+import View.GamePanel;
 
 public class CollisionManager {
-    GameView gp;
+    GamePanel gp;
 
-    public CollisionManager(GameView gp) {
+    public CollisionManager(GamePanel gp) {
         this.gp = gp;
     }
 

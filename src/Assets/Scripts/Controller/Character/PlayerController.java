@@ -4,7 +4,7 @@ import Controller.Event.KeyHandler;
 import Controller.Item.ItemFlashController;
 import Controller.Item.ItemGhostController;
 import Model.Player;
-import View.GameView;
+import View.GamePanel;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -13,14 +13,14 @@ import java.awt.image.BufferedImage;
 
 public class PlayerController {
     public Player player;
-    GameView gp;
+    GamePanel gp;
     KeyHandler keyH;
     // Item
     public boolean isUsed;
     public ItemFlashController flash = new ItemFlashController(this);
     public ItemGhostController ghost = new ItemGhostController(this);
 
-    public PlayerController(GameView gp, KeyHandler keyH) {
+    public PlayerController(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
         this.player = new Player();

@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class Laser extends Projectile {
     public BufferedImage startImage, endImage;
-    public String state;
 
     public Laser() {
         super();
@@ -25,8 +24,8 @@ public class Laser extends Projectile {
         BufferedImage image = null;
         UtilityTool uTool = new UtilityTool();
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("Monsters/MonsterProjectile/laser_0" + num +".png"));
-            image = uTool.scaleImage(image, 48, 48);
+            image = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/laser_0" + num +".png"));
+            image = uTool.scaleImage(image, imageWidth, imageHeight);
         } catch (IOException e) {
             e.printStackTrace();
         }

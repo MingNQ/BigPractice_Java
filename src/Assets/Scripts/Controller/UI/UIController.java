@@ -1,16 +1,16 @@
 package Controller.UI;
 
-import View.GameView;
+import View.GamePanel;
 
 import java.awt.*;
 
 public class UIController {
-    GameView gp;
+    GamePanel gp;
     Graphics2D g2;
 
     Font brickSans_40;
 
-    public UIController(GameView gp) {
+    public UIController(GamePanel gp) {
         this.gp = gp;
 
         // Set Font
