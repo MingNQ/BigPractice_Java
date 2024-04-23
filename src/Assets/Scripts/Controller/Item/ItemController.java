@@ -15,7 +15,6 @@ public class ItemController {
         item = new Item();
     }
 
-
     // Draw item's image
     public void draw(Graphics2D g2) {
         g2.drawImage(item.getFlashImg(), gp.screenWidth / 2 - gp.tileSize + 24, gp.screenHeight - gp.tileSize - 24, gp.tileSize, gp.tileSize, null);

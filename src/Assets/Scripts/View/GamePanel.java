@@ -3,11 +3,12 @@ package View;
 import Controller.Character.PlayerController;
 import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
-import Controller.Event.Score;
+import Controller.Event.TimeManager;
 import Controller.Item.ItemController;
 import Controller.Projectile.BallPool;
 import Controller.Projectile.BallController;
 import Controller.Projectile.LaserController;
+import Controller.Projectile.LaserPool;
 import Controller.TileSet.TileManager;
 import Controller.UI.UIController;
 
@@ -36,11 +37,12 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
     public ItemController itemController = new ItemController(this);
-    public LinkedList<BallController> projectileList = new LinkedList<>();
-    public BallPool projectilePool = new BallPool(this);
-    public Score score = new Score(this);
+    public LinkedList<BallController> ballList = new LinkedList<>();
+    public BallPool ballPool = new BallPool(this);
+    public LinkedList<LaserController> laserList = new LinkedList<>();
+    public LaserPool laserPool = new LaserPool(this);
+    public TimeManager timeManager = new TimeManager(this);
 
-    public LaserController laserController = new LaserController(this);
 
     // Game state
     public int gameState;
@@ -68,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         // FPS of game
-        int FPS = 60;
+        int FPS = 70;
         double drawInterval = (double) ONE_BILL / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
@@ -95,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Display FPS
             if (timer >= ONE_BILL) {
-                playerController.countDount(); // Countdown time using item
+//                playerController.countDount(); // Countdown time using item
                 System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -106,41 +108,60 @@ public class GamePanel extends JPanel implements Runnable {
     // Set up default entity
     public void setUpGame() {
         gameState = playState;
-        projectileList.add(projectilePool.getBall());
+        ballList.add(ballPool.getBall());
+//        laserList.add(laserPool.getLaser());
     }
 
     // Update is called 60 per frame
     public void update() {
         // Check if state is playing
         if (gameState == playState) {
-            score.update(); // Update time and score
+            timeManager.update(); // Update time and score
             playerController.update(); // Update player
 
             // Update Ball Projectile
-//            if (canSpawn()) {
-//                projectileList.add(projectilePool.getBall());
-//            }
-//            Iterator<BallController> it = projectileList.iterator();
-//
-//            while (it.hasNext()) {
-//                BallController curr = it.next();
-//                curr.update();
-//
-//                if (curr.isOutRange()) {
-//                    it.remove();
-//                    projectilePool.returnBall(curr);
-//                }
-//
-//                // Check if collide
+            if (canSpawnBall()) {
+                ballList.add(ballPool.getBall());
+            }
+            Iterator<BallController> it = ballList.iterator();
+
+            while (it.hasNext()) {
+                BallController curr = it.next();
+                curr.update();
+
+                // if ball out of screen remove it
+                if (curr.isOutRange()) {
+                    it.remove();
+                    ballPool.returnBall(curr);
+                }
+
+                // Check if collide
 //                if (collisionManager.checkCollide(playerController.player, curr.projectile))
 //                    System.exit(1);
-//            }
+            }
 
-            // Update Laser Projectile
-            laserController.update();
-//            if (laserController.satCollision(laserController.projectile.hitbox, laserController.angle, playerController.player.hitbox, 0)) {
-//                System.out.println("Collide");
-//            }
+            // Update Laser Projectiles
+            if (canSpawnLaser()) {
+                laserList.add(laserPool.getLaser());
+            }
+            Iterator<LaserController> iter = laserList.iterator();
+
+            while (iter.hasNext()) {
+                LaserController curr = iter.next();
+                curr.update();
+
+                // If laser is time out remove it
+                if (isTimeOutLaser(curr)) {
+                    iter.remove();
+                    laserPool.returnLaser(curr);
+                }
+
+                // Check collision
+                if (collisionManager.checkCollide(curr.projectile, playerController.player)) {
+                    System.out.println("Laser kill");
+//                    System.exit(1);
+                }
+            }
         }
     }
 
@@ -150,24 +171,37 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g; // Convert graphics to graphics2D
 
         tileM.draw(g2); // Draw tile set background
+
         // Draw Laser Projectile
-        laserController.draw(g2);
+        for (LaserController ls : laserList) {
+            ls.draw(g2);
+        }
 
         playerController.draw(g2); // Draw player
-        // Draw Ball Projectile
-//        for (BallController pt : projectileList) {
-//            pt.draw(g2);
-//        }
 
+        // Draw Ball Projectile
+        for (BallController ball : ballList) {
+            ball.draw(g2);
+        }
 
         itemController.draw(g2);// Draw item
-        score.draw(g2); // Draw score
+        timeManager.draw(g2); // Draw score
         ui.draw(g2);
         g2.dispose(); // Release system resource that is using
     }
 
     // Check if ball can spawn
-    public boolean canSpawn() {
-        return score.isPivotTime();
+    public boolean canSpawnBall() {
+        return timeManager.isTimeSpawnBall();
+    }
+
+    // Check if laser can spawn
+    public boolean canSpawnLaser() {
+        return timeManager.isTimeSpawnLaser();
+    }
+
+    // Check if laser is time out and disappear
+    public boolean isTimeOutLaser(LaserController laser) {
+        return laser.projectile.state.equals("death");
     }
 }

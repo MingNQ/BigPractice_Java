@@ -65,6 +65,8 @@ public class Laser extends Projectile {
                     image = endImage;
                 }
                 break;
+            case "death":
+                break;
         }
 
         return image;
