@@ -3,7 +3,7 @@ package Controller.Item;
 import Controller.Character.PlayerController;
 
 public class ItemFlashController {
-    private double flashCoolDown = 45; // Cooldown
+    private double flashCoolDown = 45 * 70; // Cooldown
     private double flashCoolDownCurr; // Counter cooldown
     private PlayerController player;
 
@@ -41,7 +41,6 @@ public class ItemFlashController {
 
     // Countdown
     public void countDown() {
-//        System.out.println("Flash: " + flashCoolDownCurr);
         flashCoolDownCurr -= 2;
     }
 }

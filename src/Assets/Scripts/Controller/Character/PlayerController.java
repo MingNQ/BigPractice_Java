@@ -44,6 +44,7 @@ public class PlayerController {
     // Update is called 60 per frame
     public void update() {
         useItem(); // Check if player use item
+        countDount(); // Countdown time using item
 
         // Check player movement
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -73,7 +74,7 @@ public class PlayerController {
             } else if (keyH.leftPressed) {
                 player.direction = "left";
                 player.moveLeft();
-            } else if (keyH.rightPressed) {
+            } else {
                 player.direction = "right";
                 player.moveRight();
             }
@@ -108,19 +109,11 @@ public class PlayerController {
         // Use first item
         if (keyH.fistSkillPressed && flash.isAvailable()) {
             flash.use();
-            if (player.direction == "up") {
-                player.posX = player.posX;
-                player.posY = player.posY - gp.tileSize;
-            } else if (player.direction == "down") {
-                player.posX = player.posX;
-                player.posY = player.posY + gp.tileSize;
-            } else if (player.direction == "left") {
-                player.posX = player.posX - gp.tileSize;
-                player.posY = player.posY;
-                ;
-            } else if (player.direction == "right") {
-                player.posX = player.posX + gp.tileSize;
-                player.posY = player.posY;
+            switch (player.direction) {
+                case "up" -> player.posY = player.posY - gp.tileSize * 2;
+                case "down" -> player.posY = player.posY + gp.tileSize * 2;
+                case "left" -> player.posX = player.posX - gp.tileSize * 2;
+                case "right" -> player.posX = player.posX + gp.tileSize * 2;
             }
             System.out.println("Player use Flash!");
         }

@@ -18,6 +18,11 @@ public class ProjectileController {
         this.gp = gp;
     }
 
+    // Reset hit box
+    public void resetHitbox() {
+        projectile.hitbox = new Rectangle2D.Double(0, 0, 0, 0);
+    }
+
     // Set default value when call
     public void setDefaultValue() {
         spawn();
