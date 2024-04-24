@@ -24,7 +24,7 @@ public class PlayerController {
         this.gp = gp;
         this.keyH = keyH;
         this.player = new Player();
-        this.player.getPlayerImage("Character_01");
+        this.player.getPlayerImage("Character_05");
         this.setDefaultValues();
     }
 

@@ -5,15 +5,18 @@ import View.GamePanel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class UIController {
     GamePanel gp;
     Graphics2D g2;
-    Font brickSans_40;
+    Font brickSans_36;
 
+    // Handle music
     BufferedImage musicOn;
     BufferedImage musicOff;
+    BufferedImage arrow;
 
     // State and Sub Window
     public int subState = 0;
@@ -23,11 +26,17 @@ public class UIController {
 
     public UIController(GamePanel gp) {
         this.gp = gp;
+        try {
+            brickSans_36 = Font.createFont(Font.PLAIN, new File("./src/Assets/Sprites/Font/BrickSans-Bold.otf")).deriveFont(36f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        }
 
-        // Set Font
-        brickSans_40 = new Font("Brick Sans", Font.PLAIN, 40);
         musicOn = getMusicButtonImage("Music_On.png");
         musicOff = getMusicButtonImage("Music_Off.png");
+        arrow = getMusicButtonImage("Arrow.png");
         isMusicOn = true;
         isSoundOn = true;
     }
@@ -47,7 +56,7 @@ public class UIController {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
 
-        g2.setFont(brickSans_40);
+        g2.setFont(brickSans_36);
         g2.setColor(Color.WHITE);
 
         if (gp.gameState == gp.pauseState) {
@@ -74,8 +83,7 @@ public class UIController {
 
         switch (subState) {
             case 0: optionTop(frameX, frameY); break;
-            case 1: break;
-            case 2: break;
+            case 1: optionConfirm(frameX, frameY); break;
         }
     }
 
@@ -126,7 +134,7 @@ public class UIController {
                 isMusicOn = false;
                 gp.music.stop();
             }
-        } else if (!isMusicOn){
+        } else {
             g2.drawImage(musicOff, imageX, imageY, null);
             g2.drawString("Off", textX, textY);
             if (!gp.keyH.musicPressed) {
@@ -158,6 +166,36 @@ public class UIController {
             if (!gp.keyH.soundPressed) {
                 isSoundOn = true;
             }
+        }
+    }
+
+    public void optionConfirm(int frameX, int frameY) {
+        String message = "Are you sure back to \nmenu";
+        int textX;
+        int textY;
+        textX = frameX + gp.tileSize;
+        textY = frameY + gp.tileSize * 2;
+        for (String line : message.split("\n")) {
+            g2.drawString(line, textX, textY);
+            textY += 40;
+        }
+
+        // Yes
+        String text = "Yes";
+        textX = getXForCenterText(text);
+        textY += gp.tileSize * 3;
+        g2.drawString(text, textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 30, textY);
+        }
+
+        // No
+        text = "No";
+        textX = getXForCenterText(text);
+        textY += gp.tileSize;
+        g2.drawString(text, textX, textY);
+        if (commandNum == 1) {
+            g2.drawString(">", textX - 30, textY);
         }
     }
 
