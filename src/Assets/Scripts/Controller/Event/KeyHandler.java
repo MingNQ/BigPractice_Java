@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.security.Key;
 
 public class KeyHandler implements KeyListener, MouseListener {
     GamePanel gp;
@@ -56,43 +55,72 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (gp.gameState == gp.pauseState) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 // Handle Options
-                if (gp.ui.commandNum > 0) {
-                    gp.ui.commandNum--;
+                if (gp.ui.subState == 0) {
+                    if (gp.ui.commandNum > 0) {
+                        gp.ui.commandNum--;
+                    }
+                }
+                if (gp.ui.subState == 1) {
+                    if (gp.ui.commandNum > 0) {
+                        gp.ui.commandNum--;
+                    }
                 }
             }
             if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
                 // Handle Options
-                if (gp.ui.commandNum == 0 && gp.music.volumeScale > 0) {
-                    gp.music.volumeScale--;
-                    gp.music.checkVolume();
-                }
-                if (gp.ui.commandNum == 1 && gp.sound.volumeScale > 0) {
-                    gp.sound.volumeScale--;
-                    gp.sound.checkVolume();
+                if (gp.ui.subState == 0) {
+                    if (gp.ui.commandNum == 0 && gp.music.volumeScale > 0) {
+                        gp.music.volumeScale--;
+                        gp.music.checkVolume();
+                    }
+                    if (gp.ui.commandNum == 1 && gp.sound.volumeScale > 0) {
+                        gp.sound.volumeScale--;
+                        gp.sound.checkVolume();
+                    }
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 // Handle Options
-                if (gp.ui.commandNum < 2) {
-                    gp.ui.commandNum++;
+                if (gp.ui.subState == 0) {
+                    if (gp.ui.commandNum < 2) {
+                        gp.ui.commandNum++;
+                    }
+                }
+                if (gp.ui.subState == 1) {
+                    if (gp.ui.commandNum < 1) {
+                        gp.ui.commandNum++;
+                    }
                 }
             }
             if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-                if (gp.ui.commandNum == 0 && gp.music.volumeScale < 5) {
-                    gp.music.volumeScale++;
-                    gp.music.checkVolume();
-                }
-                if (gp.ui.commandNum == 1 && gp.sound.volumeScale < 5) {
-                    gp.sound.volumeScale++;
-                    gp.sound.checkVolume();
+                if (gp.ui.subState == 0) {
+                    if (gp.ui.commandNum == 0 && gp.music.volumeScale < 5) {
+                        gp.music.volumeScale++;
+                        gp.music.checkVolume();
+                    }
+                    if (gp.ui.commandNum == 1 && gp.sound.volumeScale < 5) {
+                        gp.sound.volumeScale++;
+                        gp.sound.checkVolume();
+                    }
                 }
             }
             if (code == KeyEvent.VK_ENTER) {
                 // Handle Options
-                if (gp.ui.commandNum == 0) {
-                    musicPressed = !musicPressed;
-                } else if (gp.ui.commandNum == 1) {
-                    soundPressed = !soundPressed;
+                if (gp.ui.subState == 0) {
+                    if (gp.ui.commandNum == 0) {
+                        musicPressed = !musicPressed;
+                    } else if (gp.ui.commandNum == 1) {
+                        soundPressed = !soundPressed;
+                    } else if (gp.ui.commandNum == 2) {
+                        gp.ui.subState = 1;
+                        gp.ui.commandNum = 0;
+                    }
+                }
+                if (gp.ui.subState == 1) {
+                    if (gp.ui.commandNum == 1) {
+                        gp.ui.subState = 0;
+                        gp.ui.commandNum = 0;
+                    }
                 }
             }
         }

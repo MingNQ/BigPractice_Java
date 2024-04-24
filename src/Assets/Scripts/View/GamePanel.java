@@ -56,7 +56,11 @@ public class GamePanel extends JPanel implements Runnable {
     // UI
     public UIController ui = new UIController(this);
 
-    public GamePanel() {
+    // Frame
+    private Game frame;
+
+    public GamePanel(Game frame) {
+        this.frame = frame;
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Set size for screen
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // Improve rendering performance
@@ -110,8 +114,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
-        playMusic(1);
         gameState = playState;
+        playMusic(0);
         ballList.add(ballPool.getBall());
         timeManager.setHighestScore(readScore());
     }
@@ -142,8 +146,12 @@ public class GamePanel extends JPanel implements Runnable {
                 // Check if collide
                 if (collisionManager.checkCollide(playerController.player, curr.projectile)) {
 //                    saveScore();
-                    if (ui.isSoundOn)
-                        playSoundEffect(2);
+//                    gameState = gameEndState;
+//                    frame.switchToGameOver();
+                    if (ui.isSoundOn) {
+
+                    }
+//                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -167,8 +175,11 @@ public class GamePanel extends JPanel implements Runnable {
                 // Check collision
                 if (collisionManager.checkCollide(curr.projectile, playerController.player)) {
 //                    saveScore();
-                    if (ui.isSoundOn)
-                        playSoundEffect(2);
+//                    gameState = gameEndState;
+//                    frame.switchToGameOver();
+                    if (ui.isSoundOn) {
+                    }
+//                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -180,21 +191,24 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g; // Convert graphics to graphics2D
 
-        tileM.draw(g2); // Draw tile set background
+        if (gameState == playState) {
+            tileM.draw(g2); // Draw tile set background
 
-        // Draw Laser Projectile
-        for (LaserController ls : laserList) {
-            ls.draw(g2);
+            // Draw Laser Projectile
+            for (LaserController ls : laserList) {
+                ls.draw(g2);
+            }
+
+            playerController.draw(g2); // Draw player
+
+            // Draw Ball Projectile
+            for (BallController ball : ballList) {
+                ball.draw(g2);
+            }
+
+            timeManager.draw(g2); // Draw score
         }
 
-        playerController.draw(g2); // Draw player
-
-        // Draw Ball Projectile
-        for (BallController ball : ballList) {
-            ball.draw(g2);
-        }
-
-        timeManager.draw(g2); // Draw score
         ui.draw(g2);
         g2.dispose(); // Release system resource that is using
     }
@@ -232,7 +246,6 @@ public class GamePanel extends JPanel implements Runnable {
         sound.play();
     }
 
-
     // Save highest score
     public void saveScore() {
         double s = timeManager.getPlayTime();
@@ -240,8 +253,18 @@ public class GamePanel extends JPanel implements Runnable {
         data.saveScore(timeManager.getHighestScore());
     }
 
-    // Read highest score from file
+    // Read Highest score from file
     public double readScore() {
         return data.readScore();
+    }
+
+    // Game over
+    public void gameOver() {
+        stopMusic();
+    }
+
+    // Play Again
+    public void restart() {
+
     }
 }
