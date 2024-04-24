@@ -3,14 +3,15 @@ package View;
 import Controller.Character.PlayerController;
 import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
-import Controller.Event.TimeManager;
-import Controller.Item.ItemController;
+import Controller.Tool.DataStorage;
+import Controller.Tool.SoundManager;
+import Controller.Tool.TimeManager;
 import Controller.Projectile.BallPool;
 import Controller.Projectile.BallController;
 import Controller.Projectile.LaserController;
 import Controller.Projectile.LaserPool;
 import Controller.TileSet.TileManager;
-import Controller.UI.UIController;
+import Controller.Tool.UIController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,18 +37,20 @@ public class GamePanel extends JPanel implements Runnable {
     public Thread gameThread;
     public CollisionManager collisionManager = new CollisionManager(this);
     public PlayerController playerController = new PlayerController(this, keyH);
-    public ItemController itemController = new ItemController(this);
     public LinkedList<BallController> ballList = new LinkedList<>();
     public BallPool ballPool = new BallPool(this);
     public LinkedList<LaserController> laserList = new LinkedList<>();
     public LaserPool laserPool = new LaserPool(this);
     public TimeManager timeManager = new TimeManager(this);
 
+    public SoundManager sound = new SoundManager();
+    public DataStorage data = new DataStorage();
 
     // Game state
     public int gameState;
     public final int playState = 1;
-    public final int gameEndState = 2;
+    public final int pauseState = 2;
+    public final int gameEndState = 3;
 
     // UI
     public UIController ui = new UIController(this);
@@ -97,7 +100,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Display FPS
             if (timer >= ONE_BILL) {
-//                playerController.countDount(); // Countdown time using item
                 System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -107,9 +109,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
+//        playMusic(0);
         gameState = playState;
         ballList.add(ballPool.getBall());
-//        laserList.add(laserPool.getLaser());
+        timeManager.setHighestScore(readScore());
     }
 
     // Update is called 60 per frame
@@ -136,8 +139,11 @@ public class GamePanel extends JPanel implements Runnable {
                 }
 
                 // Check if collide
-//                if (collisionManager.checkCollide(playerController.player, curr.projectile))
+                if (collisionManager.checkCollide(playerController.player, curr.projectile)) {
+//                    saveScore();
+//                    playSoundEffect(2);
 //                    System.exit(1);
+                }
             }
 
             // Update Laser Projectiles
@@ -158,7 +164,8 @@ public class GamePanel extends JPanel implements Runnable {
 
                 // Check collision
                 if (collisionManager.checkCollide(curr.projectile, playerController.player)) {
-                    System.out.println("Laser kill");
+//                    saveScore();
+//                    playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -184,7 +191,6 @@ public class GamePanel extends JPanel implements Runnable {
             ball.draw(g2);
         }
 
-        itemController.draw(g2);// Draw item
         timeManager.draw(g2); // Draw score
         ui.draw(g2);
         g2.dispose(); // Release system resource that is using
@@ -203,5 +209,35 @@ public class GamePanel extends JPanel implements Runnable {
     // Check if laser is time out and disappear
     public boolean isTimeOutLaser(LaserController laser) {
         return laser.projectile.state.equals("death");
+    }
+
+    // Play music
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    // Stop music
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    // Play sound effect
+    public void playSoundEffect(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+
+    // Save highest score
+    public void saveScore() {
+        double s = timeManager.getPlayTime();
+        timeManager.setHighestScore(s);
+        data.saveScore(timeManager.getHighestScore());
+    }
+
+    // Read highest score from file
+    public double readScore() {
+        return data.readScore();
     }
 }

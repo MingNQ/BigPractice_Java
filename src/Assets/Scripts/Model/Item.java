@@ -5,22 +5,12 @@ import java.awt.image.BufferedImage;
 
 public class Item {
     // Position
-    private String name;
     private BufferedImage flashImg;
     private BufferedImage ghostImg;
     private BufferedImage bg;
 
     public Item() {
-        name = "";
         setItemImage();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public BufferedImage getFlashImg() {
