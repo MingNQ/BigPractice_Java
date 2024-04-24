@@ -91,11 +91,9 @@ public class ItemGhostController {
         int frameWidth = player.gp.tileSize;
         int frameHeight = player.gp.tileSize;
 
-        String time = new DecimalFormat("#0").format(ghostCoolDownCurr/100);
-        int length = (int) g2.getFontMetrics().getStringBounds(time, g2).getWidth();
-        int height = (int) g2.getFontMetrics().getStringBounds(time, g2).getHeight();
-        int itemFrameY = player.gp.tileSize / 2 + height / 2;
-        int itemFrameX = player.gp.tileSize / 2 - length;
+        String time = new DecimalFormat("#00").format(ghostCoolDownCurr/100);
+        int itemFrameY = player.gp.tileSize / 2 + 6;
+        int itemFrameX = player.gp.tileSize / 2 - 12;
         Font font = new Font("Brick Sans", Font.BOLD, 20);
 
         g2.drawImage(item.getGhostImg(), frameX, frameY, frameWidth, frameHeight, null);

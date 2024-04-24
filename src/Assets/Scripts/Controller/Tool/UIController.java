@@ -2,18 +2,46 @@ package Controller.Tool;
 
 import View.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class UIController {
     GamePanel gp;
     Graphics2D g2;
     Font brickSans_40;
 
+    BufferedImage musicOn;
+    BufferedImage musicOff;
+
+    // State and Sub Window
+    public int subState = 0;
+    public int commandNum = 0;
+    public boolean isMusicOn;
+    public boolean isSoundOn;
+
     public UIController(GamePanel gp) {
         this.gp = gp;
 
         // Set Font
         brickSans_40 = new Font("Brick Sans", Font.PLAIN, 40);
+        musicOn = getMusicButtonImage("Music_On.png");
+        musicOff = getMusicButtonImage("Music_Off.png");
+        isMusicOn = true;
+        isSoundOn = true;
+    }
+
+    public BufferedImage getMusicButtonImage(String path) {
+        BufferedImage image = null;
+        UtilityTool uTool = new UtilityTool();
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/Sound/" + path));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     public void draw(Graphics2D g2) {
@@ -43,6 +71,94 @@ public class UIController {
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(frameX+5, frameY+5, frameWidth-10, frameHeight-10, 25, 25);
+
+        switch (subState) {
+            case 0: optionTop(frameX, frameY); break;
+            case 1: break;
+            case 2: break;
+        }
+    }
+
+    public void optionTop(int frameX, int frameY) {
+        int textX;
+        int textY;
+
+        // Title
+        String text = "Pause";
+        textX = getXForCenterText(text);
+        textY = frameY + gp.tileSize;
+        g2.drawString(text, textX, textY);
+
+
+        // Music
+        textX = frameX + gp.tileSize;
+        textY += gp.tileSize * 2;
+        g2.drawString("Music", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 30, textY);
+        }
+
+        // Sound Effect
+        textY += gp.tileSize * 3;
+        g2.drawString("Sound", textX, textY);
+        if (commandNum == 1) {
+            g2.drawString(">", textX - 30, textY);
+        }
+
+        // Back to main menu
+        text = "Back To Menu";
+        textX = getXForCenterText(text);
+        textY += gp.tileSize * 3;
+        g2.drawString(text, textX, textY);
+        if (commandNum == 2) {
+            g2.drawString(">", textX - 30, textY);
+        }
+
+        // Music Volume Change
+        int imageX = frameX + gp.tileSize * 4;
+        int imageY = frameY + gp.tileSize * 2 + 12;
+        textX = frameX + gp.tileSize * 6;
+        textY = frameY + gp.tileSize * 3;
+        if (isMusicOn) {
+            g2.drawImage(musicOn, imageX, imageY, null);
+            g2.drawString("On", textX, textY);
+            if (gp.keyH.musicPressed) {
+                isMusicOn = false;
+                gp.music.stop();
+            }
+        } else if (!isMusicOn){
+            g2.drawImage(musicOff, imageX, imageY, null);
+            g2.drawString("Off", textX, textY);
+            if (!gp.keyH.musicPressed) {
+                isMusicOn = true;
+                gp.music.play();
+            }
+        }
+        textX = frameX + gp.tileSize * 4;
+        textY += gp.tileSize;
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRect(textX, textY, 150, 20);
+        int volumeWidth = 30 * gp.music.volumeScale;
+        g2.fillRect(textX, textY, volumeWidth, 20);
+
+        // Sound Volume Change
+        imageX = frameX + gp.tileSize * 4;
+        imageY = frameY + gp.tileSize * 5 + 12;
+        textX = frameX + gp.tileSize * 6;
+        textY = frameY + gp.tileSize * 6;
+        if (isSoundOn) {
+            g2.drawImage(musicOn, imageX, imageY, null);
+            g2.drawString("On", textX, textY);
+            if (gp.keyH.soundPressed) {
+                isSoundOn = false;
+            }
+        } else {
+            g2.drawImage(musicOff, imageX, imageY, null);
+            g2.drawString("Off", textX, textY);
+            if (!gp.keyH.soundPressed) {
+                isSoundOn = true;
+            }
+        }
     }
 
     public int getXForCenterText(String text) {

@@ -43,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     public LaserPool laserPool = new LaserPool(this);
     public TimeManager timeManager = new TimeManager(this);
 
+    public SoundManager music = new SoundManager();
     public SoundManager sound = new SoundManager();
     public DataStorage data = new DataStorage();
 
@@ -109,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Set up default entity
     public void setUpGame() {
-//        playMusic(0);
+        playMusic(1);
         gameState = playState;
         ballList.add(ballPool.getBall());
         timeManager.setHighestScore(readScore());
@@ -141,7 +142,8 @@ public class GamePanel extends JPanel implements Runnable {
                 // Check if collide
                 if (collisionManager.checkCollide(playerController.player, curr.projectile)) {
 //                    saveScore();
-//                    playSoundEffect(2);
+                    if (ui.isSoundOn)
+                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -165,7 +167,8 @@ public class GamePanel extends JPanel implements Runnable {
                 // Check collision
                 if (collisionManager.checkCollide(curr.projectile, playerController.player)) {
 //                    saveScore();
-//                    playSoundEffect(2);
+                    if (ui.isSoundOn)
+                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -213,14 +216,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Play music
     public void playMusic(int i) {
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
 
     // Stop music
     public void stopMusic() {
-        sound.stop();
+        music.stop();
     }
 
     // Play sound effect
@@ -228,6 +231,7 @@ public class GamePanel extends JPanel implements Runnable {
         sound.setFile(i);
         sound.play();
     }
+
 
     // Save highest score
     public void saveScore() {
