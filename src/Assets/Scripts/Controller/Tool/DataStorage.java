@@ -1,10 +1,13 @@
 package Controller.Tool;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class DataStorage {
     File file;
+
     public DataStorage() {
         this.file = new File("./src/Assets/Sprites/SaveGame/data.txt");
     }
@@ -33,11 +36,5 @@ public class DataStorage {
             e.printStackTrace();
         }
         return Double.parseDouble(s);
-    }
-
-    public static void main(String[] args) {
-        DataStorage data = new DataStorage();
-
-        System.out.println(data.readScore());
     }
 }

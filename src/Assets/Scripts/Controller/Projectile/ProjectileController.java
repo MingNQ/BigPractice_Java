@@ -7,12 +7,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 public class ProjectileController {
-    Random rd;
-    GamePanel gp;
     public Projectile projectile = new Projectile();
-
     public double xDir = 4; // x direction
     public double yDir = 4; // y direction
+    Random rd;
+    GamePanel gp;
 
     public ProjectileController(GamePanel gp) {
         this.gp = gp;

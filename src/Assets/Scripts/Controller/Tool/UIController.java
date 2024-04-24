@@ -9,20 +9,18 @@ import java.io.File;
 import java.io.IOException;
 
 public class UIController {
-    GamePanel gp;
-    Graphics2D g2;
-    Font brickSans_36;
-
-    // Handle music
-    BufferedImage musicOn;
-    BufferedImage musicOff;
-    BufferedImage arrow;
-
     // State and Sub Window
     public int subState = 0;
     public int commandNum = 0;
     public boolean isMusicOn;
     public boolean isSoundOn;
+    GamePanel gp;
+    Graphics2D g2;
+    Font brickSans_36;
+    // Handle music
+    BufferedImage musicOn;
+    BufferedImage musicOff;
+    BufferedImage arrow;
 
     public UIController(GamePanel gp) {
         this.gp = gp;
@@ -79,11 +77,15 @@ public class UIController {
         c = new Color(255, 255, 255);
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(frameX+5, frameY+5, frameWidth-10, frameHeight-10, 25, 25);
+        g2.drawRoundRect(frameX + 5, frameY + 5, frameWidth - 10, frameHeight - 10, 25, 25);
 
         switch (subState) {
-            case 0: optionTop(frameX, frameY); break;
-            case 1: optionConfirm(frameX, frameY); break;
+            case 0:
+                optionTop(frameX, frameY);
+                break;
+            case 1:
+                optionConfirm(frameX, frameY);
+                break;
         }
     }
 

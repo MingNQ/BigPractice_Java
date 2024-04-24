@@ -1,7 +1,6 @@
 package Controller.Projectile;
 
 import Model.Ball;
-import Model.Projectile;
 import View.GamePanel;
 
 import java.awt.*;

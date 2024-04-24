@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class LaserPool {
-    private Queue<LaserController> pool;
     GamePanel gp;
+    private Queue<LaserController> pool;
 
     public LaserPool(GamePanel gp) {
         this.gp = gp;

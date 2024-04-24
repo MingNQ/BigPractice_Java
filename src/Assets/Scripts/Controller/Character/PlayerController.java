@@ -14,17 +14,17 @@ import java.awt.image.BufferedImage;
 public class PlayerController {
     public Player player;
     public GamePanel gp;
-    KeyHandler keyH;
     // Item
     public boolean isUsed;
     public ItemFlashController flash = new ItemFlashController(this);
     public ItemGhostController ghost = new ItemGhostController(this);
+    KeyHandler keyH;
 
     public PlayerController(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
         this.player = new Player();
-        this.player.getPlayerImage("Character_05");
+//        this.player.getPlayerImage("Character_05");
         this.setDefaultValues();
     }
 

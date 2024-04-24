@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class SelectChamp extends JPanel {
+    Font font_title = null;
+    Font font_button = null;
     private JPanel mainPanel;
     private JPanel buttonSelectPanel, buttonDecisionPanel;
     private JButton button_champ1;
@@ -21,15 +23,17 @@ public class SelectChamp extends JPanel {
     private JPanel imgPanel;
     private JLabel imgLabel;
     private JLabel nameLabel;
-    Font font_title = null;
-    Font font_button = null;
-
     private Game gframe;
+    private int characterNum = 1;
 
     public SelectChamp(Game gframe) {
         this.gframe = gframe;
         this.setDoubleBuffered(true);
         init();
+    }
+
+    public int getCharacterNum() {
+        return this.characterNum;
     }
 
     private void init() {
@@ -95,7 +99,8 @@ public class SelectChamp extends JPanel {
                 Image newImage = champ1.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                 ImageIcon newIcon = new ImageIcon(newImage);
                 imgLabel.setIcon(newIcon);
-
+                characterNum = 1;
+                System.out.println(characterNum);
             }
         });
         buttonPanelSouth.add(button_champ1);
@@ -114,7 +119,8 @@ public class SelectChamp extends JPanel {
                 Image newImage = champ2.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                 ImageIcon newIcon = new ImageIcon(newImage);
                 imgLabel.setIcon(newIcon);
-
+                characterNum = 2;
+                System.out.println(characterNum);
             }
         });
         buttonPanelSouth.add(button_champ2);
@@ -133,6 +139,8 @@ public class SelectChamp extends JPanel {
                 Image newImage = champ3.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                 ImageIcon newIcon = new ImageIcon(newImage);
                 imgLabel.setIcon(newIcon);
+                characterNum = 3;
+                System.out.println(characterNum);
             }
         });
         buttonPanelSouth.add(button_champ3);
@@ -153,6 +161,8 @@ public class SelectChamp extends JPanel {
                 Image newImage = champ4.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                 ImageIcon newIcon = new ImageIcon(newImage);
                 imgLabel.setIcon(newIcon);
+                characterNum = 4;
+                System.out.println(characterNum);
             }
         });
         buttonPanelSouth.add(button_champ4);
@@ -172,6 +182,8 @@ public class SelectChamp extends JPanel {
                 Image newImage = champ5.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                 ImageIcon newIcon = new ImageIcon(newImage);
                 imgLabel.setIcon(newIcon);
+                characterNum = 5;
+                System.out.println(characterNum);
             }
         });
         buttonPanelSouth.add(button_champ5);
@@ -192,9 +204,9 @@ public class SelectChamp extends JPanel {
         startButton.setFocusPainted(false);
         startButton.setBorderPainted(false);
         startButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Select Character Num
                 gframe.switchToGamePanel();
             }
         });
