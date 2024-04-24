@@ -6,11 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.Key;
 
 public class KeyHandler implements KeyListener, MouseListener {
     GamePanel gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed; // Control key event
     public boolean fistSkillPressed, secondSkillPressed;
+    public boolean musicPressed, soundPressed;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -24,7 +26,12 @@ public class KeyHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+        keyMovement(code);
+        keyOption(code);
+    }
 
+    // Handle player movement and use item
+    public void keyMovement(int code) {
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             upPressed = true;
         }
@@ -43,13 +50,61 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_K || code == KeyEvent.VK_NUMPAD2) {
             secondSkillPressed = true;
         }
+    }
+
+    public void keyOption(int code) {
+        if (gp.gameState == gp.pauseState) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                // Handle Options
+                if (gp.ui.commandNum > 0) {
+                    gp.ui.commandNum--;
+                }
+            }
+            if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+                // Handle Options
+                if (gp.ui.commandNum == 0 && gp.music.volumeScale > 0) {
+                    gp.music.volumeScale--;
+                    gp.music.checkVolume();
+                }
+                if (gp.ui.commandNum == 1 && gp.sound.volumeScale > 0) {
+                    gp.sound.volumeScale--;
+                    gp.sound.checkVolume();
+                }
+            }
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                // Handle Options
+                if (gp.ui.commandNum < 2) {
+                    gp.ui.commandNum++;
+                }
+            }
+            if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+                if (gp.ui.commandNum == 0 && gp.music.volumeScale < 5) {
+                    gp.music.volumeScale++;
+                    gp.music.checkVolume();
+                }
+                if (gp.ui.commandNum == 1 && gp.sound.volumeScale < 5) {
+                    gp.sound.volumeScale++;
+                    gp.sound.checkVolume();
+                }
+            }
+            if (code == KeyEvent.VK_ENTER) {
+                // Handle Options
+                if (gp.ui.commandNum == 0) {
+                    musicPressed = !musicPressed;
+                } else if (gp.ui.commandNum == 1) {
+                    soundPressed = !soundPressed;
+                }
+            }
+        }
         if (code == KeyEvent.VK_ESCAPE) {
+            // Handle Options
             if (gp.gameState == gp.playState) {
                 gp.gameState = gp.pauseState;
             } else {
                 gp.gameState = gp.playState;
             }
         }
+
     }
 
     @Override

@@ -16,7 +16,7 @@ public class TimeManager implements Serializable {
     private double timeSpawnLaser;
     private double playTime;
     private double highestScore;
-    private DecimalFormat decimalFormat = new DecimalFormat("#0");
+    private final DecimalFormat decimalFormat = new DecimalFormat("#0");
 
     public TimeManager(GamePanel gp) {
         this.gp = gp;

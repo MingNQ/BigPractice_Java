@@ -56,7 +56,7 @@ public class ItemFlashController {
         int frameWidth = player.gp.tileSize;
         int frameHeight = player.gp.tileSize;
 
-        String time = new DecimalFormat("#0").format(flashCoolDownCurr/100);
+        String time = new DecimalFormat("#00").format(flashCoolDownCurr/100);
         int length = (int) g2.getFontMetrics().getStringBounds(time, g2).getWidth();
         int height = (int) g2.getFontMetrics().getStringBounds(time, g2).getHeight();
         int itemFrameY = player.gp.tileSize / 2 + height / 2;
