@@ -13,7 +13,7 @@ public class BallPool {
         this.gp = gp;
         this.pool = new LinkedList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 15; i++) {
             pool.add(new BallController(gp));
         }
     }

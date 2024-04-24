@@ -37,11 +37,18 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             rightPressed = true;
         }
-        if (code == KeyEvent.VK_J) {
+        if (code == KeyEvent.VK_J || code == KeyEvent.VK_NUMPAD1) {
             fistSkillPressed = true;
         }
-        if (code == KeyEvent.VK_K) {
+        if (code == KeyEvent.VK_K || code == KeyEvent.VK_NUMPAD2) {
             secondSkillPressed = true;
+        }
+        if (code == KeyEvent.VK_ESCAPE) {
+            if (gp.gameState == gp.playState) {
+                gp.gameState = gp.pauseState;
+            } else {
+                gp.gameState = gp.playState;
+            }
         }
     }
 
@@ -61,10 +68,10 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             rightPressed = false;
         }
-        if (code == KeyEvent.VK_J) {
+        if (code == KeyEvent.VK_J || code == KeyEvent.VK_NUMPAD1) {
             fistSkillPressed = false;
         }
-        if (code == KeyEvent.VK_K) {
+        if (code == KeyEvent.VK_K || code == KeyEvent.VK_NUMPAD2) {
             secondSkillPressed = false;
         }
     }

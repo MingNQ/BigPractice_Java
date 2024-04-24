@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.UI.UtilityTool;
+import Controller.Tool.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -1,6 +1,6 @@
 package Controller.TileSet;
 
-import Controller.UI.UtilityTool;
+import Controller.Tool.UtilityTool;
 import Model.Tile;
 import View.GamePanel;
 

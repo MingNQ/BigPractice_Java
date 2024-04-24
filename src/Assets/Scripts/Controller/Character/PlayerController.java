@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 public class PlayerController {
     public Player player;
-    GamePanel gp;
+    public GamePanel gp;
     KeyHandler keyH;
     // Item
     public boolean isUsed;
@@ -44,7 +44,7 @@ public class PlayerController {
     // Update is called 60 per frame
     public void update() {
         useItem(); // Check if player use item
-        countDount(); // Countdown time using item
+        countDown(); // Countdown time using item
 
         // Check player movement
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -101,6 +101,10 @@ public class PlayerController {
 
         at = AffineTransform.getTranslateInstance(player.posX, player.posY);
         g2.drawImage(image, at, null);
+
+        // Draw Item Image
+        flash.draw(g2);
+        ghost.draw(g2);
     }
 
     // Player use item
@@ -127,7 +131,7 @@ public class PlayerController {
     }
 
     // Countdown time when timeout using item
-    public void countDount() {
+    public void countDown() {
         flash.countDown();
         ghost.countDown();
         if (ghost.getGhostTimeUseCurr() <= 0 && !ghost.isTimeOut()) {
@@ -136,5 +140,4 @@ public class PlayerController {
             System.out.println("Timeout Ghost! Speed is " + player.speed);
         }
     }
-
 }
