@@ -1,6 +1,7 @@
 package View;
 
 import Controller.Screen.ControllerStartScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,17 +9,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class StartScreen extends JPanel {
+    Font font_title = null;
+    Font font_button = null;
     private JButton button_start;
     private JButton button_option;
     private JButton button_exit;
     private Graphics g;
     private JDialog volumeControlDialog;
     private JSlider volumeSlider;
-
     private Game frame;
-
-	Font font_title = null;
-	Font font_button = null;
 
     public StartScreen(Game frame) {
         this.frame = frame;
@@ -48,7 +47,7 @@ public class StartScreen extends JPanel {
 
         //Thiết lập background
         JLabel label_background = new JLabel();
-		ImageIcon bg = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/Background/Screen/background_img.png")));
+        ImageIcon bg = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/Background/Screen/background_img.png")));
         label_background.setIcon(bg);
         label_background.setBounds(0, 0, 768, 576);
         pane.add(label_background, JLayeredPane.DEFAULT_LAYER);
@@ -72,14 +71,14 @@ public class StartScreen extends JPanel {
         label_game.setForeground(c);
 
         JLabel label_left = new JLabel();
-		ImageIcon left = new ImageIcon(Toolkit.getDefaultToolkit().createImage(StartScreen.class.getResource("/Characters/Character_01/down_1.png")));
+        ImageIcon left = new ImageIcon(Toolkit.getDefaultToolkit().createImage(StartScreen.class.getResource("/Characters/Character_01/down_1.png")));
         label_left.setIcon(left);
         label_left.setBounds(150, 30, 300, 300);
         pane.add(label_left, JLayeredPane.PALETTE_LAYER);
 
         JLabel label_right = new JLabel();
-		ImageIcon right = new ImageIcon(Toolkit.getDefaultToolkit().createImage(StartScreen.class.getResource("/Characters/Character_04/down_1.png")));
-		label_right.setIcon(right);
+        ImageIcon right = new ImageIcon(Toolkit.getDefaultToolkit().createImage(StartScreen.class.getResource("/Characters/Character_04/down_1.png")));
+        label_right.setIcon(right);
         label_right.setBounds(510, 30, 300, 300);
         pane.add(label_right, JLayeredPane.PALETTE_LAYER);
 
@@ -92,7 +91,7 @@ public class StartScreen extends JPanel {
         button_start.setFont(font_button);
         button_start.addActionListener(ctr);
 
-		pane.add(button_start, JLayeredPane.PALETTE_LAYER);
+        pane.add(button_start, JLayeredPane.PALETTE_LAYER);
 
         button_option = new JButton("OPTION");
         button_option.setFont(font);
@@ -112,7 +111,7 @@ public class StartScreen extends JPanel {
             }
         });
 
-		pane.add(button_option, JLayeredPane.PALETTE_LAYER);
+        pane.add(button_option, JLayeredPane.PALETTE_LAYER);
 
         button_exit = new JButton("EXIT");
         button_exit.setFont(font);
@@ -126,7 +125,7 @@ public class StartScreen extends JPanel {
         button_exit.setForeground(Color.white);
         button_exit.addActionListener(ctr);
 
-		pane.add(button_exit, JLayeredPane.PALETTE_LAYER);
+        pane.add(button_exit, JLayeredPane.PALETTE_LAYER);
 
         this.add(pane);
     }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 
 public class TimeManager implements Serializable {
+    private final DecimalFormat decimalFormat = new DecimalFormat("#0");
     GamePanel gp;
     private double timeToUpgrade = 5;
     private double countDown;
@@ -14,9 +15,9 @@ public class TimeManager implements Serializable {
     private double timeCounterLaser;
     private double timeSpawnBall;
     private double timeSpawnLaser;
+    // Handle Score
     private double playTime;
     private double highestScore;
-    private final DecimalFormat decimalFormat = new DecimalFormat("#0");
 
     public TimeManager(GamePanel gp) {
         this.gp = gp;
@@ -56,7 +57,7 @@ public class TimeManager implements Serializable {
     }
 
     public void update() {
-        playTime += (double) 2/70;
+        playTime += (double) 2 / 70;
 
         // Increase the hard mode
         if (playTime - countDown >= timeToUpgrade && timeSpawnBall > 0) {
@@ -70,7 +71,7 @@ public class TimeManager implements Serializable {
         g2.setFont(new Font("Brick Sans", Font.BOLD, 25));
         g2.setColor(Color.WHITE);
 
-        String timePlay = decimalFormat.format(playTime* 100);
+        String timePlay = decimalFormat.format(playTime * 100);
         int length = (int) g2.getFontMetrics().getStringBounds(timePlay, g2).getWidth();
         int x = gp.screenWidth / 2 - length / 2;
         g2.drawString(timePlay, x, 50);

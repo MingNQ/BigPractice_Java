@@ -24,7 +24,7 @@ public class Laser extends Projectile {
         BufferedImage image = null;
         UtilityTool uTool = new UtilityTool();
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/laser_0" + num +".png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/Monsters/MonsterProjectile/laser_0" + num + ".png"));
             image = uTool.scaleImage(image, imageWidth, imageHeight);
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,7 +35,7 @@ public class Laser extends Projectile {
     @Override
     public void setAnimations() {
         spriteCount++;
-        
+
         if (spriteCount > 5) {
             if (spriteNum == 1) {
                 spriteNum = 2;

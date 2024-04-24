@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.DecimalFormat;
 
 public class GameOverScreen extends JPanel {
     private Font font_letter, font_title, font_button;
@@ -48,12 +49,29 @@ public class GameOverScreen extends JPanel {
         totalPointLabel.setBounds(50, 180, 300, 30);
         bgPanel.add(totalPointLabel);
 
+        String score = new DecimalFormat("#0").format(frame.getGamePanel().timeManager.getPlayTime()) + "";
+        JLabel scoreLabel = new JLabel(score, SwingConstants.RIGHT);
+        styleLabel(scoreLabel, font_letter, Color.WHITE);
+        scoreLabel.setBounds(360, 180, 300, 30);
+        bgPanel.add(scoreLabel);
+
+        JLabel highestScoreTitleLabel = new JLabel("Highest Score", SwingConstants.LEFT);
+        styleLabel(highestScoreTitleLabel, font_letter, Color.WHITE);
+        highestScoreTitleLabel.setBounds(50, 240, 300, 30);
+        bgPanel.add(highestScoreTitleLabel);
+
+        String highestScore = new DecimalFormat("#0").format(frame.getGamePanel().timeManager.getHighestScore()) + "";
+        JLabel highestScoreLabel = new JLabel(highestScore, SwingConstants.RIGHT);
+        styleLabel(highestScoreLabel, font_letter, Color.WHITE);
+        highestScoreLabel.setBounds(360, 240, 300, 30);
+        bgPanel.add(highestScoreLabel);
+
         // Rank section
-        JLabel rankLabel = new JLabel("<html>1. ABCXYZ: 9999999<br/>2. ABCXYZ: 8888888<br/>3. ABCXYZ: 7777777<br/>...</html>", SwingConstants.LEFT);
-        styleLabel(rankLabel, font_letter, Color.WHITE);
-        rankLabel.setFont(font_letter);
-        rankLabel.setBounds(350, 180, 500, 200);
-        bgPanel.add(rankLabel);
+//        JLabel rankLabel = new JLabel("<html>1. ABCXYZ: 9999999<br/>2. ABCXYZ: 8888888<br/>3. ABCXYZ: 7777777<br/>...</html>", SwingConstants.LEFT);
+//        styleLabel(rankLabel, font_letter, Color.WHITE);
+//        rankLabel.setFont(font_letter);
+//        rankLabel.setBounds(350, 180, 500, 200);
+//        bgPanel.add(rankLabel);
 
         // Buttons
         JButton playAgainButton = new JButton("Play Again");
@@ -62,6 +80,7 @@ public class GameOverScreen extends JPanel {
         playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.switchToSelect();
             }
         });
 

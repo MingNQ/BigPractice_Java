@@ -7,10 +7,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class OptionScreen extends JPanel {
-    private Game frame;
     Font font_title = null;
     Font font_button = null;
     Font font_letter = null;
+    private Game frame;
     private mainPanel mainpanel;
     private JLabel w_label;
     private JLabel up_label;
@@ -29,16 +29,16 @@ public class OptionScreen extends JPanel {
 
     public OptionScreen(Game frame) {
         this.frame = frame;
-		this.setDoubleBuffered(true);
+        this.setDoubleBuffered(true);
         init();
     }
 
     public void init() {
         this.setPreferredSize(new Dimension(frame.screenWidth, frame.screenHeight));
 
-		this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout());
         mainpanel = new mainPanel();
-		mainpanel.setLayout(null);
+        mainpanel.setLayout(null);
 
         try {
             font_title = Font.createFont(Font.TRUETYPE_FONT, new File("src/Assets/Sprites/Font/BrickSans-Bold.otf")).deriveFont(72f);
@@ -148,26 +148,26 @@ public class OptionScreen extends JPanel {
             }
         });
 
-		mainpanel.add(back_button);
-		mainpanel.add(label_1);
-		mainpanel.add(label_2);
-		mainpanel.add(j_label);
-		mainpanel.add(k_label);
-		mainpanel.add(ghost_label);
-		mainpanel.add(flash_label);
-		mainpanel.add(right_label);
-		mainpanel.add(down_label);
-		mainpanel.add(left_label);
-		mainpanel.add(up_label);
-		mainpanel.add(d_label);
-		mainpanel.add(a_label);
-		mainpanel.add(s_label);
-		mainpanel.add(w_label);
-		mainpanel.add(spellLabel);
-		mainpanel.add(moveLabel);
-		mainpanel.add(titleLabel);
+        mainpanel.add(back_button);
+        mainpanel.add(label_1);
+        mainpanel.add(label_2);
+        mainpanel.add(j_label);
+        mainpanel.add(k_label);
+        mainpanel.add(ghost_label);
+        mainpanel.add(flash_label);
+        mainpanel.add(right_label);
+        mainpanel.add(down_label);
+        mainpanel.add(left_label);
+        mainpanel.add(up_label);
+        mainpanel.add(d_label);
+        mainpanel.add(a_label);
+        mainpanel.add(s_label);
+        mainpanel.add(w_label);
+        mainpanel.add(spellLabel);
+        mainpanel.add(moveLabel);
+        mainpanel.add(titleLabel);
 
-		this.add(mainpanel, BorderLayout.CENTER);
+        this.add(mainpanel, BorderLayout.CENTER);
     }
 
     public Image resizeImage(ImageIcon icon, int size) {
@@ -178,11 +178,10 @@ public class OptionScreen extends JPanel {
         return image;
     }
 
-    public class mainPanel extends JPanel
-    {
+    public class mainPanel extends JPanel {
         public ImageIcon background;
-        public void paintComponent(Graphics g)
-        {
+
+        public void paintComponent(Graphics g) {
             super.paintComponents(g);
             background = new ImageIcon("./src/Assets/Sprites/Background/Screen/background_img.png");
             g.drawImage(background.getImage(), 0, 0, null);

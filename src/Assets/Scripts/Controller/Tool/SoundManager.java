@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 
 public class SoundManager {
+    public int volumeScale = 3;
+    public float volume;
     Clip clip;
     URL[] soundUrl = new URL[10];
     FloatControl floatControl;
-    public int volumeScale = 3;
-    public float volume;
 
     public SoundManager() {
         soundUrl[0] = getClass().getResource("/Sound/music_background.wav");
@@ -47,12 +47,24 @@ public class SoundManager {
     public void checkVolume() {
         // Volume is between -80f to 6f
         switch (volumeScale) {
-            case 0: volume = -80f; break;
-            case 1: volume = -20f; break;
-            case 2: volume = -12f; break;
-            case 3: volume = -5f; break;
-            case 4: volume = 1f; break;
-            case 5: volume = 6f; break;
+            case 0:
+                volume = -80f;
+                break;
+            case 1:
+                volume = -20f;
+                break;
+            case 2:
+                volume = -12f;
+                break;
+            case 3:
+                volume = -5f;
+                break;
+            case 4:
+                volume = 1f;
+                break;
+            case 5:
+                volume = 6f;
+                break;
         }
         floatControl.setValue(volume);
     }

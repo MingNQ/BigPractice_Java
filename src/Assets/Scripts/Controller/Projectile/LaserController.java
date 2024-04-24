@@ -38,7 +38,7 @@ public class LaserController extends ProjectileController {
         double argX = projectile.targetPosX - projectile.posX;
         double argY = projectile.targetPosY - projectile.posY;
 
-        angle = Math.atan2(argY, argX) - PI/2;
+        angle = Math.atan2(argY, argX) - PI / 2;
     }
 
     // Set where target distance for projectile move to
@@ -118,8 +118,8 @@ public class LaserController extends ProjectileController {
 
             AffineTransform at = new AffineTransform();
             // Rotate image
-            backX = -(image.getWidth()/2) * Math.cos(angle);
-            backY = -(image.getWidth()/2) * Math.sin(angle);
+            backX = -(image.getWidth() / 2) * Math.cos(angle);
+            backY = -(image.getWidth() / 2) * Math.sin(angle);
             at.translate(projectile.posX + backX, projectile.posY + backY);
             at.rotate(angle);
 

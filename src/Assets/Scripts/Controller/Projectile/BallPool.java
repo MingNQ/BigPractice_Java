@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BallPool {
-    private Queue<BallController> pool;
     GamePanel gp;
+    private Queue<BallController> pool;
 
     public BallPool(GamePanel gp) {
         this.gp = gp;

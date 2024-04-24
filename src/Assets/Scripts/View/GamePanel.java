@@ -3,14 +3,14 @@ package View;
 import Controller.Character.PlayerController;
 import Controller.Event.CollisionManager;
 import Controller.Event.KeyHandler;
-import Controller.Tool.DataStorage;
-import Controller.Tool.SoundManager;
-import Controller.Tool.TimeManager;
-import Controller.Projectile.BallPool;
 import Controller.Projectile.BallController;
+import Controller.Projectile.BallPool;
 import Controller.Projectile.LaserController;
 import Controller.Projectile.LaserPool;
 import Controller.TileSet.TileManager;
+import Controller.Tool.DataStorage;
+import Controller.Tool.SoundManager;
+import Controller.Tool.TimeManager;
 import Controller.Tool.UIController;
 
 import javax.swing.*;
@@ -21,16 +21,17 @@ import java.util.LinkedList;
 public class GamePanel extends JPanel implements Runnable {
     // CONSTANT var
     public static final long ONE_BILL = 1000000000;
-
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
+    public final int playState = 1;
+    public final int pauseState = 2;
+    public final int gameEndState = 3;
     // SCREEN SETTINGS
     private final int originalTileSize = 16; // 16x16px tile
     private final int scale = 3;
     public final int tileSize = originalTileSize * scale; // 48x48px
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
     public final int screenWidth = maxScreenCol * tileSize; // WIDTH of screen = 48 * 16 = 768px
     public final int screenHeight = maxScreenRow * tileSize; // HEIGHT of screen = 48 * 12 = 576px
-
     // Instantiate
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
@@ -42,17 +43,11 @@ public class GamePanel extends JPanel implements Runnable {
     public LinkedList<LaserController> laserList = new LinkedList<>();
     public LaserPool laserPool = new LaserPool(this);
     public TimeManager timeManager = new TimeManager(this);
-
     public SoundManager music = new SoundManager();
     public SoundManager sound = new SoundManager();
     public DataStorage data = new DataStorage();
-
     // Game state
     public int gameState;
-    public final int playState = 1;
-    public final int pauseState = 2;
-    public final int gameEndState = 3;
-
     // UI
     public UIController ui = new UIController(this);
 
@@ -66,6 +61,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // Improve rendering performance
         this.addKeyListener(keyH);
         this.setFocusable(true); // FOCUS on key event;
+    }
+
+    public Game getFrame() {
+        return this.frame;
     }
 
     // Run game
@@ -115,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Set up default entity
     public void setUpGame() {
         gameState = playState;
-        playMusic(0);
+        playMusic(1);
         ballList.add(ballPool.getBall());
         timeManager.setHighestScore(readScore());
     }
@@ -147,11 +146,11 @@ public class GamePanel extends JPanel implements Runnable {
                 if (collisionManager.checkCollide(playerController.player, curr.projectile)) {
 //                    saveScore();
 //                    gameState = gameEndState;
-//                    frame.switchToGameOver();
+                    gameOver();
+                    System.out.println("Score: " + timeManager.getPlayTime());
                     if (ui.isSoundOn) {
-
+                        playSoundEffect(2);
                     }
-//                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -174,12 +173,11 @@ public class GamePanel extends JPanel implements Runnable {
 
                 // Check collision
                 if (collisionManager.checkCollide(curr.projectile, playerController.player)) {
-//                    saveScore();
-//                    gameState = gameEndState;
-//                    frame.switchToGameOver();
+                    gameOver();
+                    System.out.println("Score: " + timeManager.getPlayTime());
                     if (ui.isSoundOn) {
+                        playSoundEffect(2);
                     }
-//                        playSoundEffect(2);
 //                    System.exit(1);
                 }
             }
@@ -260,7 +258,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Game over
     public void gameOver() {
+        gameState = gameEndState;
+        saveScore();
         stopMusic();
+        frame.switchToGameOver();
     }
 
     // Play Again
