@@ -25,7 +25,7 @@ public class ProjectileController {
     // Set default value when call
     public void setDefaultValue() {
         spawn();
-        projectile.speed = 5.5;
+        projectile.speed = 6.0;
         setTargetDistance();
 
         projectile.startPosX = projectile.posX;
